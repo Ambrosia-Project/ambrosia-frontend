@@ -14,7 +14,7 @@ import {
   import { makeStyles } from '@mui/styles';
   import React from "react";
   import { useHistory } from "react-router-dom";
-  import logo from "../../assets/images/logo512.png";
+  import logo from "../assets/images/logo512.png";
   import CustomSnackbar from "../components/Snackbar";
   import SessionHelper from "../helpers/SessionHelper";
   import authService from "../services/auth.service";
@@ -41,26 +41,27 @@ import {
   
     const handleLogin = async (e) => {
       e.preventDefault();
-      setLoading(true);
-      const res = await authService.login(email, password);
-      if (res?.status === 200) {
-        let data = res?.data;
-        console.log(data);
-        const res2 = await authService.synchDatabase(data);
-        const data2 = res2.data;
-        const user = { ...data2.userData, roles: data2.roles };
-        console.log(user);
-        SessionHelper.setUser(user);
-        setUpdate(!update);
-        history?.location?.state
-          ? history.push(history?.location?.state?.from?.pathname)
-          : history.push("/dashboard");
-        setLoading(false);
-      } else {
-        setSnackbarMessage(res?.data?.error?.message);
-        setSnackbar(true);
-        setSeverity("error");
-      }
+      history.push("/register/info");
+      // setLoading(true);
+      // const res = await authService.login(email, password);
+      // if (res?.status === 200) {
+      //   let data = res?.data;
+      //   console.log(data);
+      //   const res2 = await authService.synchDatabase(data);
+      //   const data2 = res2.data;
+      //   const user = { ...data2.userData, roles: data2.roles };
+      //   console.log(user);
+      //   SessionHelper.setUser(user);
+      //   setUpdate(!update);
+      //   history?.location?.state
+      //     ? history.push(history?.location?.state?.from?.pathname)
+      //     : history.push("/dashboard");
+      //   setLoading(false);
+      // } else {
+      //   setSnackbarMessage(res?.data?.error?.message);
+      //   setSnackbar(true);
+      //   setSeverity("error");
+      // }
     };
     return (
       <ThemeProvider theme={theme}>
@@ -83,8 +84,17 @@ import {
                     src={logo}
                     style={{ width: '45%', height: '45%' }}
                   />
-                  <h2 className={classes.title}>Log In</h2>
+                  <h2 className={classes.title}>Sign Up</h2>
                 </Grid>
+
+                <Typography className={classes.signUp}>
+                  Already registered? Log in{" "}
+                  <a href="/signup" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize:"1rem" }}>
+                    here
+                  </a>
+                </Typography>
+
+
                 <Grid className={classes.inputGrid}>
                   <label className={classes.label}>Email</label>
                   <TextField
@@ -135,16 +145,6 @@ import {
                     onChange={(password) => setPassword(password.target.value)}
                   />
                 </Grid>
-                <Typography className={classes.signUp}>
-                  Don't have an account?{" "}
-                  <a href="/signup" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize:"1rem" }}>
-                    Sign up
-                  </a>
-                </Typography>
-                <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-                <a href="/reset" style={{ color: "#8f8e8e", fontWeight: "normal", fontSize:"1rem" }}>
-                  Forgot your password?
-                </a>
                 <div className={classes.buttonContainer}>
                   {loading ? (
                     <CircularProgress style={{ color: "#999" }} />
@@ -176,7 +176,7 @@ import {
                         }
                       }}
                     >
-                      I'm Hungry!
+                      Continue
                     </Button>
                   )}
                 </div>

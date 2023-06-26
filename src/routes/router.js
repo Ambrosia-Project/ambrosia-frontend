@@ -10,7 +10,12 @@ import { getViewAuthorizationForAll } from "../helpers/AuthorizationHelper";
 import Loading from "../components/Loading";
 
 // lazy loading components for better performance
-const Login = lazy(() => import("../pages/Login"));
+const Login = lazy(() => import("../pages/LoginPage"));
+const Register = lazy(() => import("../pages/RegisterPage"));
+const RegisterInformationPage = lazy(() => import("../pages/RegisterInformationPage"));
+const ResetPage = lazy(() => import("../pages/ResetPage"));
+const ResetConfirmationPage = lazy(() => import("../pages/ResetConfirmationPage"));
+const NewPasswordPage = lazy(() => import("../pages/NewPasswordPage"));
 const Navbar = lazy(() => import("../components/Navbar/Navbar"));
 const LandingPage = lazy(() => import("../pages/LandingPage"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
@@ -24,6 +29,31 @@ const auth = [
     component: Login,
     exact: false,
   },
+  {
+    path: "/signup",
+    component: Register,
+    exact: true,
+  },
+  {
+    path: "/register/info",
+    component: RegisterInformationPage,
+    exact: true,
+  },
+  {
+    path: "/resetpassword",
+    component: ResetPage,
+    exact: true,
+  },
+  {
+    path: "/resetpassword/confirmation",
+    component: ResetConfirmationPage,
+    exact: true,
+  },
+  {
+    path: "/resetpassword/confirmation/:token",
+    component: NewPasswordPage,
+    exact: true,
+  },
 ];
 
 const privateRoutes = [
@@ -31,7 +61,7 @@ const privateRoutes = [
     path: "/dashboard",
     component: Dashboard,
     exact: true,
-  }
+  },
 
 ];
 

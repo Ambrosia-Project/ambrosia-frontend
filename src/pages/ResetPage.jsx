@@ -3,22 +3,18 @@ import {
   CircularProgress,
   Container,
   CssBaseline,
-  Divider,
   Grid,
   Paper,
   TextField,
   ThemeProvider,
-  Typography,
-  createTheme,
+  createTheme
 } from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
 import React from "react";
 import { useHistory } from "react-router-dom";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
-import SessionHelper from "../helpers/SessionHelper";
-import authService from "../services/auth.service";
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const theme = createTheme({
@@ -27,22 +23,30 @@ const theme = createTheme({
   }
 });
 
-export default function Login({ update, setUpdate }) {
+const allergicIngredients = [
+  "Milk",
+  "Egg",
+  "Fish",
+  "Crustacean shellfish",
+  "Tree nuts",
+  "Peanuts",
+]
+
+export default function RegisterInformationPage({ update, setUpdate }) {
 
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:1020px)');
   const [loading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
   const [snackbar, setSnackbar] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState("");
   const [severity, setSeverity] = React.useState("info");
+
   const history = useHistory();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    SessionHelper.setUser({name: "test", roles: ["admin"]})
-    history.push("/dashboard");
+    history.push("/register/info");
     // setLoading(true);
     // const res = await authService.login(email, password);
     // if (res?.status === 200) {
@@ -64,6 +68,7 @@ export default function Login({ update, setUpdate }) {
     //   setSeverity("error");
     // }
   };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
@@ -85,8 +90,9 @@ export default function Login({ update, setUpdate }) {
                   src={logo}
                   style={{ width: '45%', height: '45%' }}
                 />
-                <h2 className={classes.title}>Log In</h2>
+                <h2 className={classes.title}>Reset Password</h2>
               </Grid>
+
               <Grid className={classes.inputGrid}>
                 <label className={classes.label}>Email</label>
                 <TextField
@@ -106,47 +112,14 @@ export default function Login({ update, setUpdate }) {
                     },
                   }}
                   margin="dense"
-                  label="finally lunch"
                   type="email"
+                  placeholder="example@test.com"
                   fullWidth
                   required
                   onChange={(email) => setEmail(email.target.value)}
                 />
-                <label className={classes.label}>Password</label>
-                <TextField
-                  variant="outlined"
-                  sx={{
-                    "& .MuiFilledInput-underline: before": {
-                      borderBottomColor: "#5e714e",
-                    },
-                    "& .MuiFilledInput-underline: after": {
-                      borderBottomColor: "#5e714e",
-                    },
-                    "& .MuiInputLabel-root.Mui-focused": {
-                      color: "#5e714e",
-                    },
-                    "& .MuiInputBase-root.Mui-focused": {
-                      color: "#5e714e",
-                    },
-                  }}
-                  margin="dense"
-                  label="party time"
-                  type="password"
-                  fullWidth
-                  required
-                  onChange={(password) => setPassword(password.target.value)}
-                />
+
               </Grid>
-              <Typography className={classes.signUp}>
-                Don't have an account?{" "}
-                <a href="/signup" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize:"1rem" }}>
-                  Sign up
-                </a>
-              </Typography>
-              <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-              <a href="/reset" style={{ color: "#8f8e8e", fontWeight: "normal", fontSize:"1rem" }}>
-                Forgot your password?
-              </a>
               <div className={classes.buttonContainer}>
                 {loading ? (
                   <CircularProgress style={{ color: "#999" }} />
@@ -170,15 +143,12 @@ export default function Login({ update, setUpdate }) {
                       if (email === "") {
                         setSnackbarMessage("Please enter your email");
                         setSnackbar(true);
-                      } else if (password === "") {
-                        setSnackbarMessage("Please enter your password");
-                        setSnackbar(true);
                       } else {
                         handleLogin(e);
                       }
                     }}
                   >
-                    I'm Hungry!
+                    Continue
                   </Button>
                 )}
               </div>
