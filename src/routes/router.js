@@ -10,9 +10,12 @@ import { getViewAuthorizationForAll } from "../helpers/AuthorizationHelper";
 import Loading from "../components/Loading";
 
 // lazy loading components for better performance
-const Login = lazy(() => import("../pages/LoginPage/Login"));
+const Login = lazy(() => import("../pages/Login"));
 const Navbar = lazy(() => import("../components/Navbar/Navbar"));
-const LandingPage = lazy(() => import("../pages/LandingPage/LandingPage"));
+const LandingPage = lazy(() => import("../pages/LandingPage"));
+const Dashboard = lazy(() => import("../pages/Dashboard"));
+
+
 const NotFound = lazy(() => import("../components/NotFound"));
 
 const auth = [
@@ -24,11 +27,16 @@ const auth = [
 ];
 
 const privateRoutes = [
-  
+  {
+    path: "/dashboard",
+    component: Dashboard,
+    exact: true,
+  }
+
 ];
 
 function PrivateRoute({ children, ...rest }) {
-  const isLoggedIn = SessionHelper.getIsLoggedIn();
+  const isLoggedIn = /*SessionHelper.getIsLoggedIn();*/ true;
   return (
     <Route
       {...rest}
@@ -50,35 +58,33 @@ function PrivateRoute({ children, ...rest }) {
 
 export default function AppRoutes() {
   const user = SessionHelper.getUser();
-  const [drawerList, setDrawerList] = React.useState([]);
-  const [update, setUpdate] = React.useState(false);
+  // const [drawerList, setDrawerList] = React.useState([]);
+  // const [update, setUpdate] = React.useState(false);
 
-  const populateDrawerList = useCallback(() => {
-    if (user) {
-      const roles = user?.roles;
-      const authorization = getViewAuthorizationForAll(roles);
+  // const populateDrawerList = useCallback(() => {
+  //   if (user) {
+  //     const roles = user?.roles;
+  //     //const authorization = getViewAuthorizationForAll(roles);
 
-      let drawerList = [
-        
-      ];
-      setDrawerList(drawerList);
-    }
-  }, [user, update]);
+  //     let drawerList = [
 
-  const init = useCallback(() => {
-    populateDrawerList();
-  }, [populateDrawerList, update]);
+  //     ];
+  //     setDrawerList(drawerList);
+  //   }
+  // }, [user, update]);
 
-  React.useEffect(() => {
-    init();
-  }, [init, user]);
+  // const init = useCallback(() => {
+  //   populateDrawerList();
+  // }, [populateDrawerList, update]);
+
+  // React.useEffect(() => {
+  //   init();
+  // }, [init, user]);
 
   const ProtectedRoutes = () => (
     <Switch>
       {privateRoutes.map((route, index) => (
-        <Route key={index} path={route.path} exact={route.exact}>
-          <Navbar drawerList={drawerList} component={<route.component />} />
-        </Route>
+        <Route key={index} path={route.path} component={route.component} exact={route.exact} />
       ))}
       <Route path="*" component={NotFound} />
     </Switch>
@@ -91,10 +97,11 @@ export default function AppRoutes() {
           <Route path="/" exact component={LandingPage} />
           {auth.map((route, index) => (
             <Route key={index} path={route.path} exact={route.exact}>
-              <route.component update={update} setUpdate={setUpdate} />
+              <route.component /*update={update} setUpdate={setUpdate} */ />
             </Route>
           ))}
           <PrivateRoute>
+            <Navbar />
             <ProtectedRoutes />
           </PrivateRoute>
         </Switch>

@@ -1,8 +1,7 @@
 import React from "react";
-import SessionHelper from "../../helpers/SessionHelper";
+import SessionHelper from "../helpers/SessionHelper";
 
 const LandingPage = (props) => {
-  console.log(props);
   const { history } = props;
   const isLoggedIn = SessionHelper.getIsLoggedIn();
   console.log("LoggedIn = ", isLoggedIn);
