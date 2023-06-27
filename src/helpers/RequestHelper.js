@@ -1,8 +1,7 @@
 import axios from "axios";
 import SessionHelper from "./SessionHelper";
 
-const url = ""; // base url is not determined yet
-const loginUrl = ""; //mockapi
+const url = "https://bc48-193-140-250-87.ngrok-free.app"; // base url is not determined yet
 
 /**
  * Manages the requests made to the REST api.
@@ -37,9 +36,6 @@ const Request = async (action, urlExtension, body, params, headers) => {
   let fetch;
   let new_url = url + urlExtension;
 
-  if (urlExtension === "/loginController/login/") {
-    new_url = loginUrl + urlExtension;
-  }
   await axios({
     method: action,
     url: new_url,

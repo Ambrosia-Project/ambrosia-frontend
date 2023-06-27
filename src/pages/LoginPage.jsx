@@ -41,28 +41,27 @@ export default function LoginPage({ update, setUpdate }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    SessionHelper.setUser({name: "test", roles: ["admin"]})
-    history.push("/dashboard");
-    // setLoading(true);
-    // const res = await authService.login(email, password);
-    // if (res?.status === 200) {
-    //   let data = res?.data;
-    //   console.log(data);
-    //   const res2 = await authService.synchDatabase(data);
-    //   const data2 = res2.data;
-    //   const user = { ...data2.userData, roles: data2.roles };
-    //   console.log(user);
-    //   SessionHelper.setUser(user);
-    //   setUpdate(!update);
-    //   history?.location?.state
-    //     ? history.push(history?.location?.state?.from?.pathname)
-    //     : history.push("/dashboard");
-    //   setLoading(false);
-    // } else {
-    //   setSnackbarMessage(res?.data?.error?.message);
-    //   setSnackbar(true);
-    //   setSeverity("error");
-    // }
+    setLoading(true);
+    const user = {
+      email: email,
+      password: password,
+    }
+    console.log(user);
+    console.log(password);
+    const res = await authService.login(user);
+    console.log(res);
+    if (res?.status === 200) {
+      SessionHelper.setUser(res?.data);
+      setUpdate(!update);
+      history?.location?.state
+        ? history.push(history?.location?.state?.from?.pathname)
+        : history.push("/dashboard");
+      setLoading(false);
+    } else {
+      setSnackbarMessage(res?.data?.message);
+      setSnackbar(true);
+      setSeverity("error");
+    }
   };
   return (
     <ThemeProvider theme={theme}>
@@ -144,7 +143,7 @@ export default function LoginPage({ update, setUpdate }) {
                 </a>
               </Typography>
               <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-              <a href="/reset" style={{ color: "#8f8e8e", fontWeight: "normal", fontSize:"1rem" }}>
+              <a href="/forgetPassword" style={{ color: "#8f8e8e", fontWeight: "normal", fontSize:"1rem" }}>
                 Forgot your password?
               </a>
               <div className={classes.buttonContainer}>

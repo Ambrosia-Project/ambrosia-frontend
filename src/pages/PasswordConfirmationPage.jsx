@@ -1,81 +1,72 @@
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import {
-    Box,
     Button,
     CircularProgress,
     Container,
     CssBaseline,
-    Divider,
-    FormControl,
     Grid,
-    InputLabel,
-    MenuItem,
     Paper,
-    Select,
     TextField,
     ThemeProvider,
-    Typography,
-    createTheme,
+    createTheme
 } from "@mui/material";
-import { makeStyles } from '@mui/styles';
-import React from "react";
-import { useHistory } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { makeStyles } from "@mui/styles";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
-import SessionHelper from "../helpers/SessionHelper";
 import authService from "../services/auth.service";
-import useMediaQuery from '@mui/material/useMediaQuery';
-
 
 const theme = createTheme({
     typography: {
-        fontFamily: 'Poppins, sans-serif',
-    }
+        fontFamily: "Poppins, sans-serif",
+    },
 });
 
-const allergicIngredients = [
-    "Milk",
-    "Egg",
-    "Fish",
-    "Crustacean shellfish",
-    "Tree nuts",
-    "Peanuts",
-]
-
 export default function RegisterInformationPage({ update, setUpdate }) {
-
     const classes = useStyles();
-    const matches = useMediaQuery('(min-width:1020px)');
-    const [loading, setLoading] = React.useState(false);
-    const [confirmationCode, setConfirmationCode] = React.useState("");
-    const [snackbar, setSnackbar] = React.useState(false);
-    const [snackbarMessage, setSnackbarMessage] = React.useState("");
-    const [severity, setSeverity] = React.useState("info");
+    const matches = useMediaQuery("(min-width:1020px)");
+    const [loading, setLoading] = useState(false);
+    const [confirmationCode, setConfirmationCode] = useState("");
+    const [snackbar, setSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [severity, setSeverity] = useState("info");
 
     const history = useHistory();
 
+    useEffect(() => {
+        return () => {
+            // Cancel any ongoing asynchronous tasks here
+        };
+    }, []);
+
     const handleLogin = async (e) => {
         e.preventDefault();
-        history.push("/register/info");
-        // setLoading(true);
-        // const res = await authService.login(email, password);
-        // if (res?.status === 200) {
-        //   let data = res?.data;
-        //   console.log(data);
-        //   const res2 = await authService.synchDatabase(data);
-        //   const data2 = res2.data;
-        //   const user = { ...data2.userData, roles: data2.roles };
-        //   console.log(user);
-        //   SessionHelper.setUser(user);
-        //   setUpdate(!update);
-        //   history?.location?.state
-        //     ? history.push(history?.location?.state?.from?.pathname)
-        //     : history.push("/dashboard");
-        //   setLoading(false);
-        // } else {
-        //   setSnackbarMessage(res?.data?.error?.message);
-        //   setSnackbar(true);
-        //   setSeverity("error");
-        // }
+        setLoading(true);
+
+        const email = localStorage.getItem("email");
+
+        const user = {
+            email: email,
+            code: confirmationCode,
+        };
+
+        try {
+            const res = await authService.checkUserConfirmationCode(user);
+            console.log(res);
+
+            if (res?.status === 200) {
+                history.push("/updatePassword/");
+                setLoading(false);
+            } else {
+                setSnackbarMessage(res?.data?.message);
+                setSnackbar(true);
+                setSeverity("error");
+            }
+        } catch (error) {
+            console.error(error);
+            // Handle any error, e.g., show an error snackbar
+        }
     };
 
     return (
@@ -121,12 +112,12 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                                     }}
                                     margin="dense"
                                     type="text"
-                                    placeholder=""
+                                    placeholder="Ex: 111111 (6-digit code)"
                                     fullWidth
                                     required
                                     onChange={(email) => setConfirmationCode(email.target.value)}
                                 />
-                               
+
                             </Grid>
                             <div className={classes.buttonContainer}>
                                 {loading ? (

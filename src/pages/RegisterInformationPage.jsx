@@ -1,217 +1,227 @@
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
     Box,
     Button,
     CircularProgress,
     Container,
     CssBaseline,
-    Divider,
     FormControl,
     Grid,
-    InputLabel,
     MenuItem,
     Paper,
     Select,
     TextField,
-    ThemeProvider,
-    Typography,
-    createTheme,
 } from "@mui/material";
-import { makeStyles } from '@mui/styles';
-import React from "react";
-import { useHistory } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { makeStyles } from "@mui/styles";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
-import SessionHelper from "../helpers/SessionHelper";
 import authService from "../services/auth.service";
-import useMediaQuery from '@mui/material/useMediaQuery';
 
-
-const theme = createTheme({
-    typography: {
-        fontFamily: 'Poppins, sans-serif',
-    }
-});
-
-const allergicIngredients = [
+const allergies = [
     "Milk",
-    "Egg",
+    "Eggs",
     "Fish",
     "Crustacean shellfish",
     "Tree nuts",
-    "Peanuts",
-]
+];
 
 export default function RegisterInformationPage({ update, setUpdate }) {
-
     const classes = useStyles();
-    const matches = useMediaQuery('(min-width:1020px)');
-    const [loading, setLoading] = React.useState(false);
-    const [name, setName] = React.useState("");
-    const [age, setAge] = React.useState("");
-    const [snackbar, setSnackbar] = React.useState(false);
-    const [snackbarMessage, setSnackbarMessage] = React.useState("");
-    const [severity, setSeverity] = React.useState("info");
-    const [ingredientsList, setIngredientsList] = React.useState([]);
+    const matches = useMediaQuery("(min-width:1020px)");
+    const [loading, setLoading] = useState(false);
+    const [name, setName] = useState("");
+    const [age, setAge] = useState("");
+    const [snackbar, setSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [severity, setSeverity] = useState("info");
+    const [ingredientsList, setIngredientsList] = useState([]); // from user
+    const [allergicIngredients, setAllergicIngredients] = useState([]); // from database
 
     const history = useHistory();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        history.push("/register/info");
-        // setLoading(true);
-        // const res = await authService.login(email, password);
-        // if (res?.status === 200) {
-        //   let data = res?.data;
-        //   console.log(data);
-        //   const res2 = await authService.synchDatabase(data);
-        //   const data2 = res2.data;
-        //   const user = { ...data2.userData, roles: data2.roles };
-        //   console.log(user);
-        //   SessionHelper.setUser(user);
-        //   setUpdate(!update);
-        //   history?.location?.state
-        //     ? history.push(history?.location?.state?.from?.pathname)
-        //     : history.push("/dashboard");
-        //   setLoading(false);
-        // } else {
-        //   setSnackbarMessage(res?.data?.error?.message);
-        //   setSnackbar(true);
-        //   setSeverity("error");
-        // }
+        setLoading(true);
+
+        const email = localStorage.getItem("email");
+        const password = localStorage.getItem("password");
+
+        if (email === null || password === null) {
+            setSnackbarMessage("Please enter your email and password before this step!");
+            setSnackbar(true);
+            setSeverity("error");
+            setLoading(false);
+            return;
+        }
+
+        const user = {
+            email: email,
+            password: password,
+            name: name,
+            age: age,
+            allergies: ingredientsList,
+        };
+
+        try {
+            const res = await authService.register(user);
+            console.log(res);
+            if (res?.status === 200) {
+                let data = res?.data;
+                console.log(data);
+                history.push("/login");
+                setLoading(false);
+            } else {
+                setSnackbarMessage(res?.data?.error?.message);
+                setSnackbar(true);
+                setSeverity("error");
+            }
+        } catch (error) {
+            console.error(error);
+            // Handle any error, e.g., show an error snackbar
+        }
     };
 
     const handleChange = (event) => {
         setIngredientsList(event.target.value);
     };
 
+    useEffect(() => {
+        let isMounted = true;
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline>
-                <Container fluid>
-                    <Grid align="center">
-                        <CustomSnackbar
-                            snackbar={snackbar}
-                            setSnackbar={setSnackbar}
-                            snackbarMessage={snackbarMessage}
-                            severity={severity}
-                        />
-                        <Paper
-                            elevation={3}
-                            className={matches ? classes.paperStyle : classes.paperStyleMobile}
-                        >
-                            <Grid align="center">
-                                <img
-                                    alt="ambrosia logo"
-                                    src={logo}
-                                    style={{ width: '45%', height: '45%' }}
-                                />
-                            </Grid>
+        <CssBaseline>
+            <Container fluid>
+                <Grid align="center">
+                    <CustomSnackbar
+                        snackbar={snackbar}
+                        setSnackbar={setSnackbar}
+                        snackbarMessage={snackbarMessage}
+                        severity={severity}
+                    />
+                    <Paper
+                        elevation={3}
+                        className={matches ? classes.paperStyle : classes.paperStyleMobile}
+                    >
+                        <Grid align="center">
+                            <img
+                                alt="ambrosia logo"
+                                src={logo}
+                                style={{ width: "45%", height: "45%" }}
+                            />
+                        </Grid>
 
-                            <Grid className={classes.inputGrid}>
-                                <label className={classes.label}>Name</label>
-                                <TextField
-                                    variant="outlined"
-                                    sx={{
-                                        "& .MuiFilledInput-underline: before": {
-                                            borderBottomColor: "#5e714e",
-                                        },
-                                        "& .MuiFilledInput-underline: after": {
-                                            borderBottomColor: "#5e714e",
-                                        },
-                                        "& .MuiInputLabel-root.Mui-focused": {
-                                            color: "#5e714e",
-                                        },
-                                        "& .MuiInputBase-root.Mui-focused": {
-                                            color: "#5e714e",
-                                        },
-                                    }}
-                                    margin="dense"
-                                    type="text"
-                                    fullWidth
-                                    required
-                                    onChange={(email) => setName(email.target.value)}
-                                />
-                                <label className={classes.label}>Age</label>
-                                <TextField
-                                    variant="outlined"
-                                    sx={{
-                                        "& .MuiFilledInput-underline: before": {
-                                            borderBottomColor: "#5e714e",
-                                        },
-                                        "& .MuiFilledInput-underline: after": {
-                                            borderBottomColor: "#5e714e",
-                                        },
-                                        "& .MuiInputLabel-root.Mui-focused": {
-                                            color: "#5e714e",
-                                        },
-                                        "& .MuiInputBase-root.Mui-focused": {
-                                            color: "#5e714e",
-                                        },
-                                    }}
-                                    margin="dense"
-                                    type="number"
-                                    fullWidth
-                                    required
-                                    onChange={(password) => setAge(password.target.value)}
-                                />
-                                <label className={classes.label}>Most Allergic Ingredients</label>
-                                <Box sx={{ minWidth: 120, marginTop: '5px' }}>
-                                    <FormControl fullWidth>
-
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            multiple
-                                            value={ingredientsList}
-                                            onChange={handleChange}
-                                        >
-                                            {allergicIngredients.map((ingredient) => {
-                                                return <MenuItem value={ingredient}>{ingredient}</MenuItem>
-                                            })}
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            </Grid>
-                            <div className={classes.buttonContainer}>
-                                {loading ? (
-                                    <CircularProgress style={{ color: "#999" }} />
-                                ) : (
-                                    <Button
-                                        variant="contained"
-                                        type="submit"
-                                        sx={{
-                                            backgroundColor: "#5e714e",
-                                            "&: hover": {
-                                                backgroundColor: "#6e815e",
-                                            },
-                                            "&:active": {
-                                                backgroundColor: "#5e714e",
-                                            },
-                                            fontSize: "15px",
-                                            marginTop: 5,
-                                        }}
-                                        fullWidth
-                                        onClick={(e) => {
-                                            if (name === "") {
-                                                setSnackbarMessage("Please enter your name");
-                                                setSnackbar(true);
-                                            } else if (age === "" && isNaN(age)) {
-                                                setSnackbarMessage("Please enter your age");
-                                                setSnackbar(true);
-                                            } else {
-                                                handleLogin(e);
-                                            }
-                                        }}
+                        <Grid className={classes.inputGrid}>
+                            <label className={classes.label}>Name</label>
+                            <TextField
+                                variant="outlined"
+                                sx={{
+                                    "& .MuiFilledInput-underline: before": {
+                                        borderBottomColor: "#5e714e",
+                                    },
+                                    "& .MuiFilledInput-underline: after": {
+                                        borderBottomColor: "#5e714e",
+                                    },
+                                    "& .MuiInputLabel-root.Mui-focused": {
+                                        color: "#5e714e",
+                                    },
+                                    "& .MuiInputBase-root.Mui-focused": {
+                                        color: "#5e714e",
+                                    },
+                                }}
+                                margin="dense"
+                                type="text"
+                                fullWidth
+                                required
+                                onChange={(event) => setName(event.target.value)}
+                            />
+                            <label className={classes.label}>Age</label>
+                            <TextField
+                                variant="outlined"
+                                sx={{
+                                    "& .MuiFilledInput-underline: before": {
+                                        borderBottomColor: "#5e714e",
+                                    },
+                                    "& .MuiFilledInput-underline: after": {
+                                        borderBottomColor: "#5e714e",
+                                    },
+                                    "& .MuiInputLabel-root.Mui-focused": {
+                                        color: "#5e714e",
+                                    },
+                                    "& .MuiInputBase-root.Mui-focused": {
+                                        color: "#5e714e",
+                                    },
+                                }}
+                                margin="dense"
+                                type="number"
+                                fullWidth
+                                required
+                                onChange={(event) => setAge(event.target.value)}
+                            />
+                            <label className={classes.label}>Most Allergic Ingredients</label>
+                            <Box sx={{ minWidth: 120, marginTop: "5px" }}>
+                                <FormControl fullWidth>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        multiple
+                                        value={ingredientsList}
+                                        onChange={handleChange}
                                     >
-                                        I'm Hungry!
-                                    </Button>
-                                )}
-                            </div>
-                        </Paper>
-                    </Grid>
-                </Container>
-            </CssBaseline>
-        </ThemeProvider>
+                                        {allergies.map((ingredient) => (
+                                            <MenuItem key={ingredient} value={ingredient}>
+                                                {ingredient}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </Grid>
+                        <div className={classes.buttonContainer}>
+                            {loading ? (
+                                <CircularProgress style={{ color: "#999" }} />
+                            ) : (
+                                <Button
+                                    variant="contained"
+                                    type="submit"
+                                    sx={{
+                                        backgroundColor: "#5e714e",
+                                        "&: hover": {
+                                            backgroundColor: "#6e815e",
+                                        },
+                                        "&:active": {
+                                            backgroundColor: "#5e714e",
+                                        },
+                                        fontSize: "15px",
+                                        marginTop: 5,
+                                    }}
+                                    fullWidth
+                                    onClick={(e) => {
+                                        if (name === "") {
+                                            setSnackbarMessage("Please enter your name");
+                                            setSnackbar(true);
+                                        } else if (age === "" || isNaN(parseInt(age))) {
+                                            setSnackbarMessage("Please enter your age");
+                                            setSnackbar(true);
+                                        } else {
+                                            handleLogin(e);
+                                        }
+                                    }}
+                                >
+                                    I'm Hungry!
+                                </Button>
+                            )}
+                        </div>
+                    </Paper>
+                </Grid>
+            </Container>
+        </CssBaseline>
     );
 }
 

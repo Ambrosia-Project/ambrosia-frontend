@@ -15,6 +15,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
+import authService from "../services/auth.service";
 
 
 const theme = createTheme({
@@ -47,27 +48,41 @@ export default function RegisterInformationPage({ update, setUpdate }) {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        history.push("/register/info");
-        // setLoading(true);
-        // const res = await authService.login(email, password);
-        // if (res?.status === 200) {
-        //   let data = res?.data;
-        //   console.log(data);
-        //   const res2 = await authService.synchDatabase(data);
-        //   const data2 = res2.data;
-        //   const user = { ...data2.userData, roles: data2.roles };
-        //   console.log(user);
-        //   SessionHelper.setUser(user);
-        //   setUpdate(!update);
-        //   history?.location?.state
-        //     ? history.push(history?.location?.state?.from?.pathname)
-        //     : history.push("/dashboard");
-        //   setLoading(false);
-        // } else {
-        //   setSnackbarMessage(res?.data?.error?.message);
-        //   setSnackbar(true);
-        //   setSeverity("error");
-        // }
+        setLoading(true);
+
+        const email = localStorage.getItem("email");
+
+        if (email === null) {
+            setSnackbarMessage("Please enter your email before new password");
+            setSnackbar(true);
+            setSeverity("error");
+            setLoading(false);
+            return;
+        }
+
+        const user = {
+            email: email,
+            password: password,
+        }
+
+        try {
+            const res = await authService.setNewPassword(user);
+            console.log(res);
+
+            if (res?.status === 200) {
+                history.push("/login");
+            } else {
+                setSnackbarMessage(res?.data?.error?.message);
+                setSnackbar(true);
+                setSeverity("error");
+            }
+        } catch (error) {
+            console.error(error);
+            // Handle any error, e.g., show an error snackbar
+        } finally {
+            setLoading(false);
+        }
+
     };
 
     return (

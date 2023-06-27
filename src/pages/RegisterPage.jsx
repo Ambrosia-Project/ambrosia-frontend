@@ -1,24 +1,23 @@
 import {
-    Button,
-    CircularProgress,
-    Container,
-    CssBaseline,
-    Divider,
-    Grid,
-    Paper,
-    TextField,
-    ThemeProvider,
-    Typography,
-    createTheme,
-  } from "@mui/material";
-  import { makeStyles } from '@mui/styles';
-  import React from "react";
-  import { useHistory } from "react-router-dom";
-  import logo from "../assets/images/logo512.png";
-  import CustomSnackbar from "../components/Snackbar";
-  import SessionHelper from "../helpers/SessionHelper";
-  import authService from "../services/auth.service";
-  import useMediaQuery from '@mui/material/useMediaQuery';
+  Button,
+  CircularProgress,
+  Container,
+  CssBaseline,
+  Grid,
+  Paper,
+  TextField,
+  ThemeProvider,
+  Typography,
+  createTheme
+} from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { makeStyles } from '@mui/styles';
+import React from "react";
+import { useHistory } from "react-router-dom";
+import logo from "../assets/images/logo512.png";
+import CustomSnackbar from "../components/Snackbar";
+import SessionHelper from "../helpers/SessionHelper";
+import authService from "../services/auth.service";
   
   
   const theme = createTheme({
@@ -39,30 +38,15 @@ import {
     const [severity, setSeverity] = React.useState("info");
     const history = useHistory();
   
-    const handleLogin = async (e) => {
+    const handleRegister = async (e) => {
       e.preventDefault();
-      history.push("/register/info");
-      // setLoading(true);
-      // const res = await authService.login(email, password);
-      // if (res?.status === 200) {
-      //   let data = res?.data;
-      //   console.log(data);
-      //   const res2 = await authService.synchDatabase(data);
-      //   const data2 = res2.data;
-      //   const user = { ...data2.userData, roles: data2.roles };
-      //   console.log(user);
-      //   SessionHelper.setUser(user);
-      //   setUpdate(!update);
-      //   history?.location?.state
-      //     ? history.push(history?.location?.state?.from?.pathname)
-      //     : history.push("/dashboard");
-      //   setLoading(false);
-      // } else {
-      //   setSnackbarMessage(res?.data?.error?.message);
-      //   setSnackbar(true);
-      //   setSeverity("error");
-      // }
+      setLoading(true);
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+      setLoading(false);
+      history.push("/signup/info");
     };
+
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline>
@@ -89,7 +73,7 @@ import {
 
                 <Typography className={classes.signUp}>
                   Already registered? Log in{" "}
-                  <a href="/signup" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize:"1rem" }}>
+                  <a href="/login" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize:"1rem" }}>
                     here
                   </a>
                 </Typography>
@@ -172,7 +156,7 @@ import {
                           setSnackbarMessage("Please enter your password");
                           setSnackbar(true);
                         } else {
-                          handleLogin(e);
+                          handleRegister(e);
                         }
                       }}
                     >

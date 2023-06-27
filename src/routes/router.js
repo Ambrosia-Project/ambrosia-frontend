@@ -13,8 +13,8 @@ import Loading from "../components/Loading";
 const Login = lazy(() => import("../pages/LoginPage"));
 const Register = lazy(() => import("../pages/RegisterPage"));
 const RegisterInformationPage = lazy(() => import("../pages/RegisterInformationPage"));
-const ResetPage = lazy(() => import("../pages/ResetPage"));
-const ResetConfirmationPage = lazy(() => import("../pages/ResetConfirmationPage"));
+const ResetPage = lazy(() => import("../pages/ForgetPasswordPage"));
+const ResetConfirmationPage = lazy(() => import("../pages/PasswordConfirmationPage"));
 const NewPasswordPage = lazy(() => import("../pages/NewPasswordPage"));
 const Navbar = lazy(() => import("../components/Navbar/Navbar"));
 const LandingPage = lazy(() => import("../pages/LandingPage"));
@@ -35,22 +35,22 @@ const auth = [
     exact: true,
   },
   {
-    path: "/register/info",
+    path: "/signup/info",
     component: RegisterInformationPage,
     exact: true,
   },
   {
-    path: "/resetpassword",
+    path: "/forgetPassword",
     component: ResetPage,
     exact: true,
   },
   {
-    path: "/resetpassword/confirmation",
+    path: "/forgetPassword/confirmUser",
     component: ResetConfirmationPage,
     exact: true,
   },
   {
-    path: "/resetpassword/confirmation/:token",
+    path: "/updatePassword",
     component: NewPasswordPage,
     exact: true,
   },
@@ -66,7 +66,7 @@ const privateRoutes = [
 ];
 
 function PrivateRoute({ children, ...rest }) {
-  const isLoggedIn = /*SessionHelper.getIsLoggedIn();*/ true;
+  const isLoggedIn = SessionHelper.getIsLoggedIn();
   return (
     <Route
       {...rest}
@@ -89,7 +89,7 @@ function PrivateRoute({ children, ...rest }) {
 export default function AppRoutes() {
   const user = SessionHelper.getUser();
   // const [drawerList, setDrawerList] = React.useState([]);
-  // const [update, setUpdate] = React.useState(false);
+  const [update, setUpdate] = React.useState(false);
 
   // const populateDrawerList = useCallback(() => {
   //   if (user) {
@@ -127,7 +127,7 @@ export default function AppRoutes() {
           <Route path="/" exact component={LandingPage} />
           {auth.map((route, index) => (
             <Route key={index} path={route.path} exact={route.exact}>
-              <route.component /*update={update} setUpdate={setUpdate} */ />
+              <route.component update={update} setUpdate={setUpdate} />
             </Route>
           ))}
           <PrivateRoute>

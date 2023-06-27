@@ -51,7 +51,7 @@ export default function Dashboard() {
                   <img src={spagetthi} alt='food' style={{ width: '100%', height: '100%', borderRadius: '10px' }} />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+                  <Typography variant="h5" component="div" sx={{ flexGrow: 1, marginBottom: '20px' }}>
                     Spagetthi Bolognese
                   </Typography>
                   <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
