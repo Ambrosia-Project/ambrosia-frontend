@@ -14,7 +14,7 @@ import * as React from 'react';
 import logo from '../assets/images/logoNavbar.png';
 import authService from '../services/auth.service';
 
-const pages = ['Dashboard', 'Menus', 'Blog', 'Create Blog'];
+const pages = ['Menus', 'Blog', 'Create Blog'];
 const settings = ['Profile', 'Account', 'Logout'];
 
 function Navbar() {
