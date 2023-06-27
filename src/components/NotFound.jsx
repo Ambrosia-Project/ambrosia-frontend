@@ -1,11 +1,10 @@
-import React from 'react';
+import SendIcon from '@mui/icons-material/Send';
 import { Box, Button, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import think from '../assets/images/think.png';
-import SendIcon from '@mui/icons-material/Send';
+import React from 'react';
+import logo512 from '../assets/images/logo512.png';
 
 export default function NotFound() {
-  console.log("mrjg");
   return (
     <Box
       sx={{
@@ -17,7 +16,7 @@ export default function NotFound() {
     >
       <Container maxWidth="md">
         <Grid container spacing={2}>
-          <Grid xs={6}  sx={{
+          <Grid xs={6} sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -29,27 +28,32 @@ export default function NotFound() {
             <Typography variant="h3">
               Page Not Found
             </Typography>
-            <Typography variant="h6" sx = {{
+            <Typography variant="h6" sx={{
               marginTop: '50px',
               textAlign: 'center',
             }}>
               The page you’re looking for doesn’t exist or an another error occured.
             </Typography>
-            <Button variant="contained" href='/' endIcon={<SendIcon />} sx= {{
+            <Button variant="contained" href='/' endIcon={<SendIcon />} sx={{
               marginTop: '20px',
               padding: "10px 15px",
-              backgroundColor: "#9a1421",
+              backgroundColor: "#5e714e",
               color: "#fff",
               ":hover": {
                 backgroundColor: "#fff",
-                color: "#9a1421"
+                color: "#5e714e"
               }
             }}>Go Back Home</Button>
           </Grid>
           <Grid xs={6}>
             <img
-              src={think}
+              src={logo512}
               alt=""
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
             />
           </Grid>
         </Grid>

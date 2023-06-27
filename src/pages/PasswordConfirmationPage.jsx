@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import {
     Button,
     CircularProgress,
@@ -13,6 +11,8 @@ import {
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { makeStyles } from "@mui/styles";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
 import authService from "../services/auth.service";
@@ -56,8 +56,12 @@ export default function RegisterInformationPage({ update, setUpdate }) {
             console.log(res);
 
             if (res?.status === 200) {
+                setSnackbarMessage("Confirmation code is correct");
+                setSnackbar(true);
+                setSeverity("success");
+
                 history.push("/updatePassword/");
-                setLoading(false);
+
             } else {
                 setSnackbarMessage(res?.data?.message);
                 setSnackbar(true);
@@ -66,6 +70,8 @@ export default function RegisterInformationPage({ update, setUpdate }) {
         } catch (error) {
             console.error(error);
             // Handle any error, e.g., show an error snackbar
+        } finally {
+            setLoading(false);
         }
     };
 

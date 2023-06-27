@@ -70,6 +70,9 @@ export default function RegisterInformationPage({ update, setUpdate }) {
             console.log(res);
 
             if (res?.status === 200) {
+                setSnackbarMessage("New password is set");
+                setSnackbar(true);
+                setSeverity("success");
                 history.push("/login");
             } else {
                 setSnackbarMessage(res?.data?.error?.message);

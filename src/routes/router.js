@@ -16,10 +16,12 @@ const RegisterInformationPage = lazy(() => import("../pages/RegisterInformationP
 const ResetPage = lazy(() => import("../pages/ForgetPasswordPage"));
 const ResetConfirmationPage = lazy(() => import("../pages/PasswordConfirmationPage"));
 const NewPasswordPage = lazy(() => import("../pages/NewPasswordPage"));
-const Navbar = lazy(() => import("../components/Navbar/Navbar"));
+const Navbar = lazy(() => import("../components/Navbar"));
 const LandingPage = lazy(() => import("../pages/LandingPage"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
-
+const BlogPage = lazy(() => import("../pages/BlogPage"));
+const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
+const CreateBlogPage = lazy(() => import("../pages/CreateBlogPage"));
 
 const NotFound = lazy(() => import("../components/NotFound"));
 
@@ -62,7 +64,21 @@ const privateRoutes = [
     component: Dashboard,
     exact: true,
   },
-
+  {
+    path: "/blogs",
+    component: BlogPage,
+    exact: true,
+  },
+  {
+    path: "/blogs/create",
+    component: CreateBlogPage,
+    exact: true,
+  },
+  {
+    path: "/blogs/:id",
+    component: BlogDetailsPage,
+    exact: true,
+  },
 ];
 
 function PrivateRoute({ children, ...rest }) {

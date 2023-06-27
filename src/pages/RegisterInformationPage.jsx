@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import {
     Box,
     Button,
@@ -15,6 +13,8 @@ import {
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { makeStyles } from "@mui/styles";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
 import authService from "../services/auth.service";
@@ -69,17 +69,21 @@ export default function RegisterInformationPage({ update, setUpdate }) {
             console.log(res);
             if (res?.status === 200) {
                 let data = res?.data;
-                console.log(data);
+                setSnackbarMessage("Sign up successfully! Please log in to continue.");
+                setSnackbar(true);
+                setSeverity("success");
+
                 history.push("/login");
-                setLoading(false);
             } else {
-                setSnackbarMessage(res?.data?.error?.message);
+                setSnackbarMessage(res?.data?.message);
                 setSnackbar(true);
                 setSeverity("error");
             }
         } catch (error) {
             console.error(error);
             // Handle any error, e.g., show an error snackbar
+        } finally {
+            setLoading(false);
         }
     };
 

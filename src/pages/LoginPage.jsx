@@ -56,13 +56,14 @@ export default function LoginPage({ update, setUpdate }) {
       history?.location?.state
         ? history.push(history?.location?.state?.from?.pathname)
         : history.push("/dashboard");
-      setLoading(false);
     } else {
       setSnackbarMessage(res?.data?.message);
       setSnackbar(true);
       setSeverity("error");
     }
+    setLoading(false);
   };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
@@ -138,12 +139,12 @@ export default function LoginPage({ update, setUpdate }) {
               </Grid>
               <Typography className={classes.signUp}>
                 Don't have an account?{" "}
-                <a href="/signup" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize:"1rem" }}>
+                <a href="/signup" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize: "1rem" }}>
                   Sign up
                 </a>
               </Typography>
               <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-              <a href="/forgetPassword" style={{ color: "#8f8e8e", fontWeight: "normal", fontSize:"1rem" }}>
+              <a href="/forgetPassword" style={{ color: "#8f8e8e", fontWeight: "normal", fontSize: "1rem" }}>
                 Forgot your password?
               </a>
               <div className={classes.buttonContainer}>

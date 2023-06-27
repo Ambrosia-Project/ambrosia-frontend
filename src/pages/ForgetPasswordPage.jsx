@@ -57,7 +57,9 @@ export default function RegisterInformationPage({ update, setUpdate }) {
       const res = await authService.forgetPassword(user);
 
       if (res?.status === 200) {
-        console.log(res);
+        setSnackbarMessage("Please check your email for the verification code");
+        setSnackbar(true);
+        setSeverity("success");
         localStorage.setItem("email", email);
         history.push("/forgetPassword/confirmUser");
       } else {

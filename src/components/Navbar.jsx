@@ -1,22 +1,21 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
+import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import logo from '../../assets/images/logoNavbar.png';
-import authService from '../../services/auth.service';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import logo from '../assets/images/logoNavbar.png';
+import authService from '../services/auth.service';
 
-const pages = ['Menus', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Dashboard', 'Menus', 'Blog', 'Create Blog'];
+const settings = ['Profile', 'Account', 'Logout'];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -29,8 +28,16 @@ function Navbar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page) => {
     setAnchorElNav(null);
+
+    if (page === "Blog") {
+      window.location.href = "/blogs";
+    }
+    else if (page === "Create Blog") {
+      window.location.href = "/blogs/create";
+    }
+    
   };
 
   const handleCloseUserMenu = (setting) => {
@@ -45,7 +52,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" style={{background:"#5e714e"}}>
+    <AppBar position="static" style={{ background: "#5e714e" }}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters>
           <Typography
@@ -60,10 +67,10 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            <img 
+            <img
               src={logo}
               alt="logo"
-              style={{ width: '150px', height: '50px', mr: 1, background: '#f1f5f7', borderRadius: '5px'}}
+              style={{ width: '150px', height: '50px', mr: 1, background: '#f1f5f7', borderRadius: '5px' }}
             />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -96,7 +103,7 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -106,7 +113,7 @@ function Navbar() {
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -118,18 +125,18 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            <img 
+            <img
               src={logo}
               alt="logo"
-              style={{ width: '150px', height: '50px', mr: 1, background: '#f1f5f7', borderRadius: '5px'}}
+              style={{ width: '150px', height: '50px', mr: 1, background: '#f1f5f7', borderRadius: '5px' }}
             />
           </Typography>
-          
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(page)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
