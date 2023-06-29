@@ -3,75 +3,113 @@ import {
   CssBaseline,
   Divider,
   Grid,
-  IconButton,
-  InputAdornment,
-  InputBase,
   Paper,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { Container } from "@mui/system";
-
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import menuListService from "../../services/menuList.service";
 import SearchBar from "../../components/SearchBar";
 import Filter from "./Filter";
 import MenuItemCard from "./MenuItemCard";
-import veganPhoto from "../../assets/images/vegan.jpg";
+import HelperIcon from "../../components/HelpIcon";
 
 function SpecificMenuPage() {
   const { name } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [mealType, setMealType] = useState("");
+  const [allergyType, setAllergyType] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  const [minPrice, setMinPrice] = useState(-1);
+  const [maxPrice, setMaxPrice] = useState(-1);
   const [menuItemsArray, setMenuItemsArray] = useState([]);
-
-  const menuItems = [
-    {
-      id: 1,
-      ingredients: "bean, peanuts",
-      meal_name: "Tofu Bowl",
-      menu_type: "Vegan",
-      price: 45,
-      imageFile: veganPhoto,
+  const [props, setProps] = useState({
+    type: name,
+    keyword: "",
+    filter: {
+      min_price: minPrice,
+      max_price: maxPrice,
+      extra_type: mealType,
     },
-    {
-      id: 2,
-      ingredients: "bean, peanuts",
-      meal_name: "Tofu Bowl",
-      menu_type: "Vegan",
-      price: 45,
-      imageFile: veganPhoto,
-    },
-    {
-      id: 3,
-      ingredients: "bean, peanuts",
-      meal_name: "Tofu Bowl",
-      menu_type: "Vegan",
-      price: 45,
-      imageFile: veganPhoto,
-    },
-    {
-      id: 4,
-      ingredients: "bean, peanuts",
-      meal_name: "Tofu Bowl",
-      menu_type: "Vegan",
-      price: 45,
-    },
-  ];
+  });
 
-  //   const init = useCallback(async () => {
-  //     const res = await menuListService.getMenuList(name);
-  //     console.log(res);
-  //     if (res?.status === 200) {
-  //       setMenuItemsArray(res.data);
-  //     }
-  //   }, []);
+  const init = useCallback(async () => {
+    setLoading(true);
+    const res = await menuListService.getMenuList(name);
+    console.log(res);
+    if (res?.status === 200) {
+      setMenuItemsArray(res.data);
+    }
+    setLoading(false);
+  }, []);
 
-  //   useEffect(() => {
-  //     init();
-  //   }, [init]);
+  useEffect(() => {
+    init();
+  }, [init]);
 
-  const handleSearch = (searchText) => {
-    console.log("Search text:", searchText);
-    // Perform search functionality here
+  useEffect(() => {
+    if (priceRange !== "") {
+      convertPriceRange(priceRange);
+    }
+  }, [priceRange]);
+
+  function convertPriceRange(priceRange) {
+    const [minPriceTemp, maxPriceTemp] = priceRange
+      .split("-")
+      .map((price) => parseInt(price.trim()));
+    setMinPrice(minPriceTemp);
+    setMaxPrice(maxPriceTemp);
+  }
+
+  const applySearch = async (srchText) => {
+    setLoading(true);
+    let propsTemp = { ...props, keyword: srchText };
+    setProps(propsTemp);
+    const res = await menuListService.getFilteredMenu(propsTemp);
+    setMenuItemsArray(res.data.data);
+    setLoading(false);
+  };
+
+  const handleSearch = (srchText) => {
+    console.log("Search text:", srchText);
+    setSearchText(srchText);
+    applySearch(srchText);
+  };
+
+  const applyFilters = async () => {
+    setLoading(true);
+    let propsTemp = {
+      ...props,
+      filter: {
+        extra_type: mealType,
+        min_price: minPrice,
+        max_price: maxPrice,
+      },
+    };
+    setProps(propsTemp);
+    console.log(propsTemp);
+    const res = await menuListService.getFilteredMenu(propsTemp);
+    setMenuItemsArray(res.data.data);
+    setLoading(false);
+  };
+
+  const clearFilters = async () => {
+    setLoading(true);
+    let propsTemp = {
+      ...props,
+      filter: {
+        extra_type: "",
+        min_price: -1,
+        max_price: -1,
+      },
+    };
+    setProps(propsTemp);
+    const res = await menuListService.getFilteredMenu(propsTemp);
+    setMenuItemsArray(res.data.data);
+    setLoading(false);
   };
 
   return (
@@ -83,6 +121,14 @@ function SpecificMenuPage() {
             p: { xs: 2, md: 3 },
           }}
         >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            paddingRight={2}
+          >
+            <HelperIcon text="You can search by clicking the search icon or by pressing enter. Also, you can apply filter(s) by using filter" />
+          </Box>
           <Grid
             container
             spacing={4}
@@ -112,22 +158,49 @@ function SpecificMenuPage() {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: 2,
                 }}
               >
                 <SearchBar onSearch={handleSearch} />
-                <Filter />
+                <Filter
+                  setMealType={setMealType}
+                  setAllergyType={setAllergyType}
+                  setPriceRange={setPriceRange}
+                  mealType={mealType}
+                  allergyType={allergyType}
+                  priceRange={priceRange}
+                  applyFilters={applyFilters}
+                  clearFilters={clearFilters}
+                />
               </Box>
-              <Grid container spacing={3}>
-                {menuItems.map((menuItem) => (
-                  <Grid item key={menuItem.id} xs={12} sm={6} md={6} lg={6}>
-                    <MenuItemCard menuItem={menuItem} />
-                  </Grid>
-                ))}
-              </Grid>
+              {loading ? (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <CircularProgress
+                    style={{ color: "#999", justifyContent: "center" }}
+                  />
+                </div>
+              ) : menuItemsArray.length === 0 ? (
+                <Typography variant="body1" align="center" sx={{ mt: 4 }}>
+                  No menu items found
+                </Typography>
+              ) : (
+                <Grid
+                  container
+                  spacing={3}
+                  justifyContent={
+                    menuItemsArray.length === 1 ? "center" : "flex-start"
+                  }
+                >
+                  {menuItemsArray.map((menuItem) => (
+                    <Grid item key={menuItem.id} xs={12} sm={6} md={6} lg={6}>
+                      <MenuItemCard menuItem={menuItem} />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Paper>

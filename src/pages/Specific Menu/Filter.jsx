@@ -33,11 +33,17 @@ const theme = createTheme({
   },
 });
 
-const Filter = () => {
+const Filter = ({
+  setMealType,
+  setAllergyType,
+  setPriceRange,
+  mealType,
+  allergyType,
+  priceRange,
+  applyFilters,
+  clearFilters,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [mealType, setMealType] = useState("");
-  const [allergyType, setAllergyType] = useState("");
-  const [priceRange, setPriceRange] = useState("");
 
   const handleOpenFilterMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -48,7 +54,7 @@ const Filter = () => {
   };
 
   const handleApplyFilters = () => {
-    // Perform filter functionality
+    applyFilters();
     handleCloseFilterMenu();
   };
 
@@ -56,6 +62,7 @@ const Filter = () => {
     setMealType("");
     setAllergyType("");
     setPriceRange("");
+    clearFilters();
   };
 
   return (
@@ -95,8 +102,9 @@ const Filter = () => {
         <ThemeProvider theme={theme}>
           <Box sx={{ padding: "1rem", minWidth: "240px", maxWidth: "400px" }}>
             <FormControl fullWidth sx={{ my: 1 }}>
-              <InputLabel>Meal Type</InputLabel>
+              <InputLabel id="meal-type-select">Meal Type</InputLabel>
               <Select
+                labelId="meal-type-select"
                 value={mealType}
                 onChange={(e) => setMealType(e.target.value)}
               >
@@ -104,7 +112,7 @@ const Filter = () => {
                   All Meal Types
                 </MenuItem>
                 {constants.mealTypes.map((obj) => {
-                  return <MenuItem value={obj.name}>{obj.name}</MenuItem>;
+                  return <MenuItem value={obj.value}>{obj.name}</MenuItem>;
                 })}
               </Select>
             </FormControl>
@@ -118,7 +126,7 @@ const Filter = () => {
                   All Allergy Types
                 </MenuItem>
                 {constants.allergyTypes.map((obj) => {
-                  return <MenuItem value={obj.name}>{obj.name}</MenuItem>;
+                  return <MenuItem value={obj.value}>{obj.name}</MenuItem>;
                 })}
               </Select>
             </FormControl>
@@ -132,7 +140,7 @@ const Filter = () => {
                   All Price Ranges
                 </MenuItem>
                 {constants.priceRange.map((obj) => {
-                  return <MenuItem value={obj.name}>{obj.name}</MenuItem>;
+                  return <MenuItem value={obj.value}>{obj.name}</MenuItem>;
                 })}
               </Select>
             </FormControl>

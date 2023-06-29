@@ -21,7 +21,7 @@ const menuListItems = [
   },
   {
     id: 6,
-    name: "Family",
+    name: "Lactose-Free",
   },
 ];
 
@@ -38,7 +38,7 @@ const priceRange = [
   { value: "100-150", name: "$100 - $150" },
   { value: "150-200", name: "$150 - $200" },
   { value: "200-250", name: "$200 - $250" },
-  { value: "0-999999", name: "$0 - $250+" },
+  { value: "250-999999", name: "$250+" },
 ];
 
 const constants = {
