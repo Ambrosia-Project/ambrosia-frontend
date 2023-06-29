@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { MonetizationOn } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -57,6 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 const MenuItemCard = ({ menuItem }) => {
   const classes = useStyles();
+  const history = useHistory();
+
   const [isHovered, setIsHovered] = useState(false);
 
   const handleCardHover = () => {
@@ -67,7 +70,9 @@ const MenuItemCard = ({ menuItem }) => {
     setIsHovered(false);
   };
 
-  const handleCardClick = () => {};
+  const handleCardClick = () => {
+    history.push(`/menuDetails/${menuItem.id}`);
+  };
 
   return (
     <Card
@@ -75,7 +80,7 @@ const MenuItemCard = ({ menuItem }) => {
       onMouseEnter={handleCardHover}
       onMouseLeave={handleCardLeave}
       onClick={handleCardClick}
-      elevation={isHovered ? 12 : 1}
+      elevation={isHovered ? 8 : 1}
     >
       {menuItem.imageFile !== "empty" ? (
         <CardMedia

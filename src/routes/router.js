@@ -32,6 +32,7 @@ const MenuListPage = lazy(() => import("../pages/Menu List/MenuListPage"));
 const SpecificMenuListPage = lazy(() =>
   import("../pages/Specific Menu/SpecificMenuPage")
 );
+const MenuDetails = lazy(() => import("../pages/Specific Menu/MenuDetails"));
 
 const NotFound = lazy(() => import("../components/NotFound"));
 
@@ -102,6 +103,10 @@ const privateRoutes = [
   {
     path: "/menuList/:name",
     component: SpecificMenuListPage,
+  },
+  {
+    path: "/menuDetails/:id",
+    component: MenuDetails,
   },
 ];
 
