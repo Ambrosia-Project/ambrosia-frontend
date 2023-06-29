@@ -11,26 +11,24 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from "@mui/styles";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
 import SessionHelper from "../helpers/SessionHelper";
 import authService from "../services/auth.service";
-import useMediaQuery from '@mui/material/useMediaQuery';
-
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'Poppins, sans-serif',
-  }
+    fontFamily: "Poppins, sans-serif",
+  },
 });
 
 export default function LoginPage({ update, setUpdate }) {
-
   const classes = useStyles();
-  const matches = useMediaQuery('(min-width:1020px)');
+  const matches = useMediaQuery("(min-width:1020px)");
   const [loading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -45,7 +43,7 @@ export default function LoginPage({ update, setUpdate }) {
     const user = {
       email: email,
       password: password,
-    }
+    };
     console.log(user);
     console.log(password);
     const res = await authService.login(user);
@@ -64,6 +62,12 @@ export default function LoginPage({ update, setUpdate }) {
     setLoading(false);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleLogin(e);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
@@ -77,13 +81,15 @@ export default function LoginPage({ update, setUpdate }) {
             />
             <Paper
               elevation={3}
-              className={matches ? classes.paperStyle : classes.paperStyleMobile}
+              className={
+                matches ? classes.paperStyle : classes.paperStyleMobile
+              }
             >
               <Grid align="center">
                 <img
                   alt="ambrosia logo"
                   src={logo}
-                  style={{ width: '45%', height: '45%' }}
+                  style={{ width: "45%", height: "45%" }}
                 />
                 <h2 className={classes.title}>Log In</h2>
               </Grid>
@@ -111,6 +117,7 @@ export default function LoginPage({ update, setUpdate }) {
                   fullWidth
                   required
                   onChange={(email) => setEmail(email.target.value)}
+                  onKeyDown={handleKeyPress}
                 />
                 <label className={classes.label}>Password</label>
                 <TextField
@@ -135,16 +142,31 @@ export default function LoginPage({ update, setUpdate }) {
                   fullWidth
                   required
                   onChange={(password) => setPassword(password.target.value)}
+                  onKeyDown={handleKeyPress}
                 />
               </Grid>
               <Typography className={classes.signUp}>
                 Don't have an account?{" "}
-                <a href="/signup" style={{ color: "#8f8e8e", fontWeight: "bold", fontSize: "1rem" }}>
+                <a
+                  href="/signup"
+                  style={{
+                    color: "#8f8e8e",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
                   Sign up
                 </a>
               </Typography>
               <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-              <a href="/forgetPassword" style={{ color: "#8f8e8e", fontWeight: "normal", fontSize: "1rem" }}>
+              <a
+                href="/forgetPassword"
+                style={{
+                  color: "#8f8e8e",
+                  fontWeight: "normal",
+                  fontSize: "1rem",
+                }}
+              >
                 Forgot your password?
               </a>
               <div className={classes.buttonContainer}>
@@ -234,5 +256,5 @@ const useStyles = makeStyles({
     color: "#505050",
     fontSize: "1rem",
     marginTop: 45,
-  }
+  },
 });

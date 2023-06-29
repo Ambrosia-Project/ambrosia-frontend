@@ -4,6 +4,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Redirect,
+  withRouter,
 } from "react-router-dom";
 import SessionHelper from "../helpers/SessionHelper";
 import { getViewAuthorizationForAll } from "../helpers/AuthorizationHelper";
@@ -27,6 +28,10 @@ const BlogPage = lazy(() => import("../pages/BlogPage"));
 const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
 const CreateBlogPage = lazy(() => import("../pages/CreateBlogPage"));
 const AddPreferences = lazy(() => import("../pages/AddPreferences"));
+const MenuListPage = lazy(() => import("../pages/Menu List/MenuListPage"));
+const SpecificMenuListPage = lazy(() =>
+  import("../pages/Specific Menu/SpecificMenuPage")
+);
 
 const NotFound = lazy(() => import("../components/NotFound"));
 
@@ -88,6 +93,15 @@ const privateRoutes = [
     path: "/addpreferences",
     component: AddPreferences,
     exact: true,
+  },
+  {
+    path: "/menuList",
+    component: MenuListPage,
+    exact: true,
+  },
+  {
+    path: "/menuList/:name",
+    component: SpecificMenuListPage,
   },
 ];
 
