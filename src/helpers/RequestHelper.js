@@ -1,7 +1,8 @@
 import axios from "axios";
 import SessionHelper from "./SessionHelper";
 
-const url = "https://28b5-193-140-250-87.ngrok-free.app/"; // base url is not determined yet
+// const url = "https://d697-176-88-142-176.ngrok-free.app"; // base url is not determined yet
+const url = "https://ambrosia-backend.onrender.com";
 
 /**
  * Manages the requests made to the REST api.

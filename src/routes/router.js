@@ -12,9 +12,13 @@ import Loading from "../components/Loading";
 // lazy loading components for better performance
 const Login = lazy(() => import("../pages/LoginPage"));
 const Register = lazy(() => import("../pages/RegisterPage"));
-const RegisterInformationPage = lazy(() => import("../pages/RegisterInformationPage"));
+const RegisterInformationPage = lazy(() =>
+  import("../pages/RegisterInformationPage")
+);
 const ResetPage = lazy(() => import("../pages/ForgetPasswordPage"));
-const ResetConfirmationPage = lazy(() => import("../pages/PasswordConfirmationPage"));
+const ResetConfirmationPage = lazy(() =>
+  import("../pages/PasswordConfirmationPage")
+);
 const NewPasswordPage = lazy(() => import("../pages/NewPasswordPage"));
 const Navbar = lazy(() => import("../components/Navbar"));
 const LandingPage = lazy(() => import("../pages/LandingPage"));
@@ -22,6 +26,7 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const BlogPage = lazy(() => import("../pages/BlogPage"));
 const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
 const CreateBlogPage = lazy(() => import("../pages/CreateBlogPage"));
+const AddPreferences = lazy(() => import("../pages/AddPreferences"));
 
 const NotFound = lazy(() => import("../components/NotFound"));
 
@@ -79,6 +84,11 @@ const privateRoutes = [
     component: BlogDetailsPage,
     exact: true,
   },
+  {
+    path: "/addpreferences",
+    component: AddPreferences,
+    exact: true,
+  },
 ];
 
 function PrivateRoute({ children, ...rest }) {
@@ -130,7 +140,12 @@ export default function AppRoutes() {
   const ProtectedRoutes = () => (
     <Switch>
       {privateRoutes.map((route, index) => (
-        <Route key={index} path={route.path} component={route.component} exact={route.exact} />
+        <Route
+          key={index}
+          path={route.path}
+          component={route.component}
+          exact={route.exact}
+        />
       ))}
       <Route path="*" component={NotFound} />
     </Switch>
