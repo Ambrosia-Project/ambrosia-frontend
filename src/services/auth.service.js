@@ -1,6 +1,6 @@
 import Request from "../helpers/RequestHelper";
 
-const API_URL = "/authController";
+const API_URL = "authController";
 
 const login = async (user) => {
   const res = await Request("post", API_URL + "/login/", user);

@@ -1,7 +1,7 @@
 import Request from "../helpers/RequestHelper";
 import SessionHelper from "../helpers/SessionHelper";
 
-const API_URL = "/menuController";
+const API_URL = "menuController";
 const user = SessionHelper.getUser();
 console.log(user);
 
