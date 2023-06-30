@@ -102,7 +102,7 @@ export default function CreateBlogPage() {
         try {
             const res = await blogService.create(data);
             console.log(res);
-            if (res && res.status === 201) {
+            if (res?.status === 200) {
                 // Item created successfully
                 history.push("/blogs", { refresh: true });
             } else {
