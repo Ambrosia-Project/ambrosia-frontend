@@ -49,7 +49,7 @@ import authService from "../services/auth.service";
 
     const handleKeyPress = (e) => {
       if (e.key === "Enter") {
-          handleLogin(e);
+          handleRegister(e);
       }
   };
 

@@ -46,7 +46,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
 
     const history = useHistory();
 
-    const handleLogin = async (e) => {
+    const handleNewPassword = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -90,7 +90,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
-            handleLogin(e);
+            handleNewPassword(e);
         }
     };
 
@@ -200,7 +200,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                                                 setSnackbar(true);
                                             }
                                             else {
-                                                handleLogin(e);
+                                                handleNewPassword(e);
                                             }
                                         }}
                                         onKeyDown={handleKeyPress}
