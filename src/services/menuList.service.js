@@ -18,8 +18,11 @@ const getFilteredMenu = async (props) => {
   console.log(res);
   return res;
 };
-const getMenuDetails = async (id) => {
-  const res = await Request("post", API_URL + "/detail/" + id + "/");
+const getMenuDetails = async (id_) => {
+  const res = await Request("post", API_URL + "/detail/", {
+    id: id_,
+    email: user.email,
+  });
   console.log(res);
   return res;
 };

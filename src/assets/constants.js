@@ -26,12 +26,20 @@ const menuListItems = [
 ];
 
 const mealTypes = [
-  { value: "main-dishes", name: "Main Dishes" },
+  { value: "main-course", name: "Main Course" },
   { value: "dessert", name: "Dessert" },
+  { value: "soup", name: "Soup" },
+  { value: "appetizer", name: "Appetizer" },
+  { value: "salad", name: "Salad" },
+  { value: "mignartise", name: "Mignartise" },
 ];
 const allergyTypes = [
   { value: "gluten", name: "Gluten" },
-  { value: "lactose", name: "Lactose" },
+  { value: "milk", name: "Milk" },
+  { value: "peanuts", name: "Peanuts" },
+  { value: "fish", name: "Fish" },
+  { value: "soy", name: "Soy" },
+  { value: "egg", name: "Egg" },
 ];
 const priceRange = [
   { value: "0-100", name: "$0 - $100" },
