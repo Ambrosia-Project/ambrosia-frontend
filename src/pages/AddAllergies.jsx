@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Container,
@@ -12,6 +12,8 @@ import {
   MenuItem,
   IconButton,
   Box,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -63,17 +65,13 @@ const useStyles = makeStyles({
 
 export default function AddAllergies() {
   const [selectedOption, setSelectedOption] = useState("");
-  const [allergies, setAllergies] = useState(userAllergies);
+  const [allergies, setAllergies] = useState([]);
   const classes = useStyles(); // Apply custom styles
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
   };
-
-  // const handleSearch = (searchText) => {
-  //   console.log("Search text:", searchText);
-  //   // Perform search functionality here
-  // };
 
   const handleAddAllergie = () => {
     if (selectedOption && !allergies.includes(selectedOption)) {
@@ -89,9 +87,32 @@ export default function AddAllergies() {
     setAllergies(updatedAllergies);
   };
 
-  // const filteredPreferences = examplePreferences.filter((preference) =>
-  //   preference.toLowerCase().includes(selectedOption.toLowerCase())
-  // );
+  const handleSaveChanges = () => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      user.allergies = allergies;
+      localStorage.setItem("user", JSON.stringify(user));
+      setSnackbarOpen(true); // Showing the snackbar
+    }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      const localAllergies = user.allergies;
+      setAllergies(localAllergies);
+    }
+  };
 
   return (
     <CssBaseline>
@@ -210,12 +231,26 @@ export default function AddAllergies() {
                   textTransform: "none",
                   borderRadius: "24px",
                 }}
+                onClick={handleSaveChanges}
               >
                 Save Changes
               </Button>
             </Paper>
           </Grid>
         </Grid>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000} // Adjust the duration as desired
+          onClose={handleSnackbarClose}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Changes saved successfully!
+          </Alert>
+        </Snackbar>
       </Container>
     </CssBaseline>
   );
