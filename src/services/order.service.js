@@ -1,7 +1,7 @@
 import Request from "../helpers/RequestHelper";
 import SessionHelper from "../helpers/SessionHelper";
 
-const API_URL = "/orderController";
+const API_URL = "orderController";
 const user = SessionHelper.getUser();
 
 const addToCart = async (quantity_, id_) => {

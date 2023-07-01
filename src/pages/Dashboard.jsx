@@ -16,12 +16,15 @@ import chef from '../assets/images/chef.png'
 import spagetthi from '../assets/images/spagetthi.jpg'
 
 export default function Dashboard() {
-
   return (
     <CssBaseline>
       <Container maxWidth="xl">
-        <Paper elevation={3} sx={{ margin: '5% 7%', }}>
-          <Grid container spacing={2} sx={{ padding: '2% 7%', maxHeight: '1200px' }}>
+        <Paper elevation={3} sx={{ margin: "5% 7%" }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{ padding: "2% 7%", maxHeight: "1200px" }}
+          >
             <Grid item xs={12} md={12}>
               <Box style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <img src={chef} alt='chef' style={{ width: '80px', height: '80px', borderRadius: '10px' }} />
@@ -29,13 +32,37 @@ export default function Dashboard() {
                   Chief's Advice
                 </Typography>
               </Box>
-              <Divider sx={{ margin: '10px 0' }} />
+              <Divider sx={{ margin: "10px 0" }} />
             </Grid>
             <Grid item xs={12} md={12}>
-              <Carousel sx={{ margin: '0 5%' }}>
-                <img src={caesar} alt='food' style={{ width: '100%', height: '100%', borderRadius: '10px' }} />
-                <img src={cake} alt='food' style={{ width: '100%', height: '100%', borderRadius: '10px' }} />
-                <img src={calamari} alt='food' style={{ width: '100%', height: '100%', borderRadius: '10px' }} />
+              <Carousel sx={{ margin: "0 5%" }}>
+                <img
+                  src={caesar}
+                  alt="food"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "10px",
+                  }}
+                />
+                <img
+                  src={cake}
+                  alt="food"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "10px",
+                  }}
+                />
+                <img
+                  src={calamari}
+                  alt="food"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "10px",
+                  }}
+                />
               </Carousel>
             </Grid>
           </Grid>
@@ -47,23 +74,47 @@ export default function Dashboard() {
             <Paper elevation={1} sx={{ padding: '3% 7%', height: '100%' }}>
 
               <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-                <StarIcon sx={{ color: 'yellow' }} /> Most Popular
+                <StarIcon sx={{ color: "yellow" }} /> Most Popular
               </Typography>
-              <Divider sx={{ margin: '10px 0' }} />
-              <Grid container spacing={2} sx={{ padding: '3% 7%' }}>
+              <Divider sx={{ margin: "10px 0" }} />
+              <Grid container spacing={2} sx={{ padding: "3% 7%" }}>
                 <Grid item xs={12} md={6}>
-                  <img src={spagetthi} alt='food' style={{ width: '100%', height: '100%', borderRadius: '10px' }} />
+                  <img
+                    src={spagetthi}
+                    alt="food"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "10px",
+                    }}
+                  />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="h5" component="div" sx={{ flexGrow: 1, marginBottom: '20px' }}>
+                  <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{ flexGrow: 1, marginBottom: "20px" }}
+                  >
                     Spagetthi Bolognese
                   </Typography>
-                  <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-                    voluptatum, voluptate, quibusdam, quia voluptas quos dolorum
-                    voluptatibus quod quas quidem voluptatem? Quisquam voluptatum,
+                  <Typography
+                    variant="body1"
+                    component="div"
+                    sx={{ flexGrow: 1 }}
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Quisquam voluptatum, voluptate, quibusdam, quia voluptas
+                    quos dolorum voluptatibus quod quas quidem voluptatem?
+                    Quisquam voluptatum,
                   </Typography>
-                  <Button variant="contained" color='success' endIcon={<ShoppingCartIcon />} sx={{ marginTop: '20px' }}>Order Now</Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    endIcon={<ShoppingCartIcon />}
+                    sx={{ marginTop: "20px" }}
+                  >
+                    Order Now
+                  </Button>
                 </Grid>
               </Grid>
             </Paper>
@@ -106,7 +157,7 @@ export default function Dashboard() {
         </Grid>
       </Container>
     </CssBaseline>
-  )
+  );
 }
 
 const rows = [

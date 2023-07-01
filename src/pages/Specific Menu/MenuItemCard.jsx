@@ -156,7 +156,7 @@ const MenuItemCard = ({ menuItem }) => {
               className={classes.ingredients}
               sx={{ fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" } }}
             >
-              {menuItem.ingredients}
+              {menuItem.mainIngredients}
             </Typography>
 
             <Typography className={classes.priceText}>
