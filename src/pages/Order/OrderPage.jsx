@@ -142,6 +142,12 @@ function OrderPage() {
     setOrderItems((prevItems) =>
       prevItems.filter((item) => item.menu.id !== itemId)
     );
+    orderService.deleteOrder(itemId).then((res) => {
+      console.log(res);
+      window.location.reload();
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   const handleDecreaseQuantity = (itemId) => {

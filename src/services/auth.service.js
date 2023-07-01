@@ -27,6 +27,11 @@ const setNewPassword = async (user) => {
   return res;
 };
 
+const updateProfile = async (user) => {
+  const res = await Request("put", API_URL + "/profile/update/", user);
+  return res;
+};
+
 const logout = () => {
   localStorage.removeItem("user");
 };
@@ -43,6 +48,7 @@ const authService = {
   checkUserConfirmationCode,
   setNewPassword,
   getCurrentUser,
+  updateProfile
 };
 
 export default authService;

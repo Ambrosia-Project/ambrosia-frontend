@@ -13,9 +13,33 @@ import caesar from '../assets/images/caesar.png'
 import cake from '../assets/images/cake.png'
 import calamari from '../assets/images/calamari.png'
 import chef from '../assets/images/chef.png'
-import spagetthi from '../assets/images/spagetthi.jpg'
+import salad from '../assets/images/vegan.jpg'
+import orderService from '../services/order.service'
 
 export default function Dashboard() {
+
+  const [orders, setOrders] = React.useState([]);
+
+  const handleAddToCart = () => {
+    orderService.addToCart(1, 12).then((res) => {
+      console.log(res)
+      window.location.reload();
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    orderService.getOrders(user.email).then((res) => {
+      console.log(res)
+      setOrders(res?.data.content ? res.data.content : [])
+      console.log(orders)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, [])
+
   return (
     <CssBaseline>
       <Container maxWidth="xl">
@@ -80,7 +104,7 @@ export default function Dashboard() {
               <Grid container spacing={2} sx={{ padding: "3% 7%" }}>
                 <Grid item xs={12} md={6}>
                   <img
-                    src={spagetthi}
+                    src={salad}
                     alt="food"
                     style={{
                       width: "100%",
@@ -95,25 +119,24 @@ export default function Dashboard() {
                     component="div"
                     sx={{ flexGrow: 1, marginBottom: "20px" }}
                   >
-                    Spagetthi Bolognese
+                    House Salad
                   </Typography>
                   <Typography
                     variant="body1"
                     component="div"
                     sx={{ flexGrow: 1 }}
                   >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quisquam voluptatum, voluptate, quibusdam, quia voluptas
-                    quos dolorum voluptatibus quod quas quidem voluptatem?
-                    Quisquam voluptatum,
+                    At the top of our list of vegan salad recipes: House salad! This House salad is all about contrasts in color, flavor, and texture...
+
                   </Typography>
                   <Button
                     variant="contained"
                     color="success"
                     endIcon={<ShoppingCartIcon />}
                     sx={{ marginTop: "20px" }}
+                    onClick={handleAddToCart}
                   >
-                    Order Now
+                    Add to Cart
                   </Button>
                 </Grid>
               </Grid>
@@ -124,34 +147,37 @@ export default function Dashboard() {
           <Grid item xs={12} md={5}>
             <Paper elevation={1} sx={{ padding: '3% 7%' }}>
               <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingTop: '3%' }}>
-                Meals In The Order
+                <ShoppingCartIcon sx={{ color: "#000" }} /> Active Orders
               </Typography>
               <Divider sx={{ margin: '10px 0' }} />
-              <TableContainer>
+              {orders.length === 0 && <Typography variant="body1" component="div" sx={{ flexGrow: 1, paddingTop: '3%' }}>
+                You have no active orders.
+              </Typography>}
+
+              {orders.length !== 0 && <TableContainer>
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align='center'>Order Number</TableCell>
-                      <TableCell align="center">Meal</TableCell>
-                      <TableCell align="center">Status</TableCell>
-                      <TableCell align="center">Price($)</TableCell>
+
+                      <TableCell align="center" sx={{ fontWeight: 'bold' }}>Meal</TableCell>
+                      <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
+
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
+
+                    {orders.map((row) => (
                       <TableRow
-                        key={row.id}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        key={row.menu.meal_name}
                       >
-                        <TableCell align='center'>{row.id}</TableCell>
-                        <TableCell align="center">{row.name}</TableCell>
-                        <TableCell align="center"><div style={{background: '#E7B10A', padding:'1px 10px', borderRadius:'10px', textAlign:'center'}}><p style={{color:'#fff'}}>preparing</p></div></TableCell>
-                        <TableCell align="center">{row.price}</TableCell>
+                        <TableCell align="center" sx={{ borderBottom: '0' }}>{row.menu.meal_name}</TableCell>
+                        <TableCell align="center" sx={{ borderBottom: '0' }}><div style={{ background: '#E7B10A', padding: '1px 10px', borderRadius: '10px', textAlign: 'center' }}><p style={{ color: '#fff' }}>Preparing</p></div></TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
+              }
             </Paper>
           </Grid>
         </Grid>
@@ -160,15 +186,3 @@ export default function Dashboard() {
   );
 }
 
-const rows = [
-  {
-    id: '1',
-    name: 'Spagetthi Bolognese',
-    price: 10.0,
-  },
-  {
-    id: '2',
-    name: 'Spagetthi Bolognese',
-    price: 10.0,
-  },
-]

@@ -12,9 +12,9 @@ const addToCart = async (quantity_, id_) => {
   });
   return res;
 };
-const getOrders = async (id) => {
+const getOrders = async (email) => {
   const res = await Request("post", API_URL + "/orders/", {
-    email: id,
+    email: email,
   });
   return res;
 };
@@ -37,12 +37,21 @@ const getAllOrders = async () => {
   return res;
 };
 
+const deleteOrder = async (id) => {
+  const res = await Request("post", API_URL + "/order/delete/", {
+    id: user.email,
+    mealId: id,
+  });
+  return res;
+};
+
 const orderService = {
   addToCart,
   getOrders,
   orderNow,
   completeNow,
   getAllOrders,
+  deleteOrder,
 };
 
 export default orderService;
