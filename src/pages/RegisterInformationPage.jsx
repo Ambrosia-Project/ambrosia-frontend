@@ -64,7 +64,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
         getAllergies();
     }, []);
 
-    const handleLogin = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -112,6 +112,12 @@ export default function RegisterInformationPage({ update, setUpdate }) {
 
     const handleChange = (event) => {
         setIngredientsList(event.target.value);
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleRegister(e);
+        }
     };
 
     return (
@@ -236,9 +242,10 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                                             setSnackbarMessage("Please enter your age");
                                             setSnackbar(true);
                                         } else {
-                                            handleLogin(e);
+                                            handleRegister(e);
                                         }
                                     }}
+                                    onKeyDown={handleKeyPress}
                                 >
                                     I'm Hungry!
                                 </Button>

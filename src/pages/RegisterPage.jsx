@@ -47,6 +47,12 @@ import authService from "../services/auth.service";
       history.push("/signup/info");
     };
 
+    const handleKeyPress = (e) => {
+      if (e.key === "Enter") {
+          handleRegister(e);
+      }
+  };
+
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline>
@@ -159,6 +165,7 @@ import authService from "../services/auth.service";
                           handleRegister(e);
                         }
                       }}
+                      onKeyDown={handleKeyPress}
                     >
                       Continue
                     </Button>
