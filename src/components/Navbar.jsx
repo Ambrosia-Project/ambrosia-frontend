@@ -16,7 +16,7 @@ import authService from "../services/auth.service";
 import secondLogo from "../assets/images/secondLogo.png";
 
 const pages = ["Menus", "Blog", "Create Blog"];
-const settings = ["Profile", "Account", "Logout"];
+const settings = ["Profile", "Order", "Logout"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

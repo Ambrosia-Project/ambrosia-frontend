@@ -1,14 +1,14 @@
-import { InputBase, InputAdornment, IconButton, Tooltip } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import HelpIcon from "@mui/icons-material/Help";
 import React, { useState } from "react";
+import { InputBase, InputAdornment, IconButton } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState("");
-  const [showHelp, setShowHelp] = useState(false);
 
-  const handleSearch = () => {
-    onSearch(searchText);
+  const handleSearch = (text = searchText) => {
+    console.log(text);
+    onSearch(text);
   };
 
   const handleKeyDown = (event) => {
@@ -17,23 +17,15 @@ const SearchBar = ({ onSearch }) => {
     }
   };
 
-  const handleHelpIconClick = () => {
-    setShowHelp(true);
+  const handleClearSearch = () => {
+    setSearchText("");
+    handleSearch("");
   };
 
-  const handleHelpIconClose = () => {
-    setShowHelp(false);
-  };
+  const showClearIcon = searchText.length > 0;
 
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <>
       <InputBase
         placeholder="Search..."
         value={searchText}
@@ -44,14 +36,25 @@ const SearchBar = ({ onSearch }) => {
           borderRadius: "9999px",
           padding: "0.25rem",
           paddingLeft: "1rem",
+          // paddingRight: showClearIcon ? "2.5rem" : "1rem", // Adjust padding based on the presence of the clear icon
           marginRight: 1,
           border: "1px solid gray",
         }}
         endAdornment={
           <InputAdornment position="end">
+            {showClearIcon && ( // Show the clear icon only when there is text in the search input
+              <IconButton
+                color="primary"
+                onClick={handleClearSearch}
+                edge="end"
+                size="small"
+              >
+                <ClearIcon sx={{ color: "#FF914D" }} />
+              </IconButton>
+            )}
             <IconButton
               color="primary"
-              onClick={handleSearch}
+              onClick={() => handleSearch(searchText)}
               edge="end"
               size="small"
             >
@@ -60,28 +63,7 @@ const SearchBar = ({ onSearch }) => {
           </InputAdornment>
         }
       />
-      <Tooltip
-        open={showHelp}
-        onClose={handleHelpIconClose}
-        title="Press Enter to search"
-        placement="top-end"
-        enterTouchDelay={0}
-        disableFocusListener
-        disableHoverListener={!showHelp}
-        disableTouchListener={!showHelp}
-      >
-        <IconButton
-          color="primary"
-          onClick={handleSearch}
-          onMouseEnter={handleHelpIconClick}
-          onMouseLeave={handleHelpIconClose}
-          edge="end"
-          size="small"
-        >
-          <HelpIcon style={{ color: "#5E9459" }} />
-        </IconButton>
-      </Tooltip>
-    </div>
+    </>
   );
 };
 

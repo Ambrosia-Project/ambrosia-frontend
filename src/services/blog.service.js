@@ -1,6 +1,6 @@
 import Request from "../helpers/RequestHelper";
 
-const API_URL = "/blogController";
+const API_URL = "blogController";
 
 const fetchData = async () => {
     const res = await Request("post", API_URL + "/blogs/");

@@ -1,6 +1,8 @@
-import React from "react";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { MonetizationOn } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -27,6 +29,26 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 72,
     opacity: 0.5,
   },
+  content: {
+    display: "flex",
+    flexDirection: "column",
+    flexGrow: 1,
+  },
+  price: {
+    color: "#474646",
+    fontFamily: "Poppins",
+    fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
+  },
+  priceIcon: {
+    color: "#FFDCA9",
+  },
+  priceText: {
+    color: "#FFDCA9",
+    fontFamily: "Poppins",
+    fontSize: { xs: "1rem", md: "1rem", lg: "2rem" },
+    display: "flex",
+    alignItems: "center",
+  },
   ingredients: {
     color: "white",
     fontFamily: "Lavonia Classy",
@@ -36,13 +58,35 @@ const useStyles = makeStyles((theme) => ({
 
 const MenuItemCard = ({ menuItem }) => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleCardHover = () => {
+    setIsHovered(true);
+  };
+
+  const handleCardLeave = () => {
+    setIsHovered(false);
+  };
+
+  const handleCardClick = () => {
+    history.push(`/menuDetails/${menuItem.id}`);
+  };
 
   return (
-    <Card className={classes.card}>
-      {menuItem.imageFile ? (
+    <Card
+      className={classes.card}
+      onMouseEnter={handleCardHover}
+      onMouseLeave={handleCardLeave}
+      onClick={handleCardClick}
+      elevation={isHovered ? 8 : 1}
+    >
+      {menuItem.imageFile !== "empty" ? (
         <CardMedia
           className={classes.image}
-          image={menuItem.imageFile}
+          component="img"
+          src={`data:image/jpeg;base64,${menuItem.imageFile}`}
           title={menuItem.meal_name}
         />
       ) : (
@@ -52,27 +96,53 @@ const MenuItemCard = ({ menuItem }) => {
           </Typography>
         </div>
       )}
-      <CardContent>
-        <Typography
-          variant="h5"
-          component="h2"
-          gutterBottom
-          color="#FFDCA9"
-          fontFamily="Poppins"
-          sx={{
-            fontSize: { xs: "1.8rem", md: "2rem", lg: "2.2rem" },
-            fontWeight: 200,
-          }}
-        >
-          {menuItem.meal_name}
-        </Typography>
-        <Typography
-          variant="body2"
-          className={classes.ingredients}
-          sx={{ fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" } }}
-        >
-          {menuItem.ingredients}
-        </Typography>
+      <CardContent
+        className={classes.content}
+        sx={{
+          transition: "box-shadow 0.3s ease",
+          boxShadow: isHovered ? "0px 4px 10px rgba(0, 0, 0, 0.5)" : "none",
+        }}
+      >
+        <Grid container spacing={1} alignItems="center">
+          <Grid item xs={12} md={8}>
+            <Typography
+              variant="h5"
+              component="h4"
+              gutterBottom
+              color="#FFDCA9"
+              fontFamily="Poppins"
+              sx={{
+                fontSize: { xs: "1.2rem", md: "1.5rem", lg: "1.7rem" },
+                fontWeight: 200,
+              }}
+            >
+              {menuItem.meal_name}
+            </Typography>
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              className={classes.ingredients}
+              sx={{ fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" } }}
+            >
+              {menuItem.ingredients}
+            </Typography>
+
+            <Typography className={classes.priceText}>
+              <MonetizationOn className={classes.priceIcon} />
+              {menuItem.price}
+            </Typography>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );

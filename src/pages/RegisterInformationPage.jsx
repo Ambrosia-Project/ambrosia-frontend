@@ -18,6 +18,7 @@ import { useHistory } from "react-router-dom";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
 import authService from "../services/auth.service";
+import allergiesService from "../services/allergies.service";
 
 const allergies = [
     "Milk",
@@ -40,6 +41,28 @@ export default function RegisterInformationPage({ update, setUpdate }) {
     const [allergicIngredients, setAllergicIngredients] = useState([]); // from database
 
     const history = useHistory();
+
+    const getAllergies = async () => {
+        try {
+            const res = await allergiesService.getAllergies();
+            console.log(res);
+            if (res?.status === 200) {
+                let data = res?.data;
+                setAllergicIngredients(data);
+            } else {
+                setSnackbarMessage(res?.data?.message);
+                setSnackbar(true);
+                setSeverity("error");
+            }
+        } catch (error) {
+            console.error(error);
+            // Handle any error, e.g., show an error snackbar
+        }
+    };
+
+    useEffect(() => {
+        getAllergies();
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -90,14 +113,6 @@ export default function RegisterInformationPage({ update, setUpdate }) {
     const handleChange = (event) => {
         setIngredientsList(event.target.value);
     };
-
-    useEffect(() => {
-        let isMounted = true;
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
 
     return (
         <CssBaseline>
@@ -178,11 +193,18 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                                         value={ingredientsList}
                                         onChange={handleChange}
                                     >
-                                        {allergies.map((ingredient) => (
+                                        {console.log(allergicIngredients.length)}
+                                        {
+                                        allergicIngredients !== 0 && <MenuItem key={"None"} value={"None"}>
+                                            {"None"}
+                                        </MenuItem>
+                                        }
+                                        {allergicIngredients.map((ingredient) => (
                                             <MenuItem key={ingredient} value={ingredient}>
                                                 {ingredient}
                                             </MenuItem>
                                         ))}
+
                                     </Select>
                                 </FormControl>
                             </Box>
