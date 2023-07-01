@@ -27,7 +27,7 @@ function MenuListItemsPage() {
           <Grid item xs={12}>
             <Grid
               container
-              spacing={2}
+              spacing={1}
               justifyContent="center"
               alignItems="center"
             >
@@ -39,16 +39,16 @@ function MenuListItemsPage() {
                   md={4}
                   lg={4}
                   key={menuItem.id}
-                  sx={{ display: "flex", justifyContent: "center" }}
+                  sx={{ display: "flex", justifyContent: "space-around" }}
                 >
                   <Paper
                     sx={{
                       borderRadius: "16px",
                       p: matches ? 1 : 0.5,
                       textAlign: "center",
-                      width: "80%",
-                      height: 0,
-                      paddingBottom: "80%",
+                      width: { xs: "75%", md: "70%", lg: "60%" },
+                      height: "auto",
+                      paddingBottom: { xs: "80%", md: "70%", lg: "60%" },
                       position: "relative",
                       marginTop: "1rem",
                       transition: "box-shadow 0.5s ease",

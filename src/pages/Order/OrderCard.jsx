@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { MonetizationOn, ErrorOutline } from "@mui/icons-material";
+import { MonetizationOn } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -61,24 +54,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Lavonia Classy",
     fontStyle: "italic",
   },
-  warningContainer: {
-    display: "flex",
-    alignItems: "center",
-    marginTop: theme.spacing(2),
-  },
-  warningIcon: {
-    marginRight: theme.spacing(1),
-    color: theme.palette.warning.main,
-  },
-  warningText: {
-    color: theme.palette.warning.main,
-    fontWeight: "bold",
-    marginLeft: theme.spacing(1),
-    fontFamily: "Poppins",
-  },
 }));
-
-const MenuItemCard = ({ menuItem }) => {
+function OrderCard({ orderItem }) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -93,7 +70,7 @@ const MenuItemCard = ({ menuItem }) => {
   };
 
   const handleCardClick = () => {
-    history.push(`/menuDetails/${menuItem.id}`);
+    history.push(`/orders/${orderItem.email}&waiter`);
   };
 
   return (
@@ -104,20 +81,6 @@ const MenuItemCard = ({ menuItem }) => {
       onClick={handleCardClick}
       elevation={isHovered ? 8 : 1}
     >
-      {menuItem.imageFile !== "empty" ? (
-        <CardMedia
-          className={classes.image}
-          component="img"
-          src={`data:image/jpeg;base64,${menuItem.imageFile}`}
-          title={menuItem.meal_name}
-        />
-      ) : (
-        <div className={classes.noPhotoImage}>
-          <Typography variant="h6" color="textSecondary">
-            No photo has been added
-          </Typography>
-        </div>
-      )}
       <CardContent
         className={classes.content}
         sx={{
@@ -125,7 +88,7 @@ const MenuItemCard = ({ menuItem }) => {
           boxShadow: isHovered ? "0px 4px 10px rgba(0, 0, 0, 0.5)" : "none",
         }}
       >
-        <Grid container spacing={1} alignItems="center">
+        <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} md={8}>
             <Typography
               variant="h5"
@@ -134,11 +97,11 @@ const MenuItemCard = ({ menuItem }) => {
               color="#FFDCA9"
               fontFamily="Poppins"
               sx={{
-                fontSize: { xs: "1.2rem", md: "1.5rem", lg: "1.7rem" },
+                fontSize: { xs: "1.1rem", md: "1.3rem", lg: "1.5rem" },
                 fontWeight: 200,
               }}
             >
-              {menuItem.meal_name}
+              Order Number {orderItem.userId}
             </Typography>
           </Grid>
 
@@ -156,26 +119,13 @@ const MenuItemCard = ({ menuItem }) => {
               className={classes.ingredients}
               sx={{ fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" } }}
             >
-              {menuItem.ingredients}
-            </Typography>
-
-            <Typography className={classes.priceText}>
-              <MonetizationOn className={classes.priceIcon} />
-              {menuItem.price}
+              {orderItem.email}
             </Typography>
           </Grid>
         </Grid>
-        {menuItem.isAllergic && (
-          <Box className={classes.warningContainer}>
-            <ErrorOutline className={classes.warningIcon} />
-            <Typography variant="body2" className={classes.warningText}>
-              This meal includes allergenic substance(s)! Please be careful!
-            </Typography>
-          </Box>
-        )}
       </CardContent>
     </Card>
   );
-};
+}
 
-export default MenuItemCard;
+export default OrderCard;

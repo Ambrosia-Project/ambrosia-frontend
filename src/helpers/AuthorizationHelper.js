@@ -3,10 +3,6 @@ import SessionHelper from "./SessionHelper";
 let authorizationLookup = {};
 const user = SessionHelper.getUser();
 
-authorizationLookup.application = {
-  
-};
-
 export function getLookup() {
   return authorizationLookup;
 }
@@ -24,4 +20,3 @@ export function getViewAuthorizationForAll(roles) {
   }
   return authorization;
 }
-

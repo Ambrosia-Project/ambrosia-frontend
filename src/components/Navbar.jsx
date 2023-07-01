@@ -11,16 +11,19 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import logo from "../assets/images/logoNavbar.png";
 import authService from "../services/auth.service";
 import secondLogo from "../assets/images/secondLogo.png";
+import SessionHelper from "../helpers/SessionHelper";
 
 const pages = ["Menus", "Blog", "Create Blog"];
+const pagesWaiter = ["Menus", "Blog", "Orders"];
 const settings = ["Profile", "Order", "Logout"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const user = SessionHelper.getUser();
+  const userRole = user.role;
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -34,21 +37,23 @@ function Navbar() {
 
     if (page === "Blog") {
       window.location.href = "/blogs";
-    } else if (page === "Create Blog") {
+    } else if (page === "Create Blog" && userRole !== "waiter") {
       window.location.href = "/blogs/create";
     } else if (page === "Menus") {
       window.location.href = "/menuList";
+    } else if (page === "Orders" && userRole === "waiter") {
+      window.location.href = "/allOrders";
     }
   };
 
   const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
 
-    console.log(setting);
-
     if (setting === "Logout") {
       authService.logout();
       window.location.reload();
+    } else if (setting === "Order" && userRole !== "waiter") {
+      window.location.href = `/orders/${user.email}&customer`;
     }
   };
 
@@ -109,11 +114,18 @@ function Navbar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              {userRole === "customer" &&
+                pages.map((page) => (
+                  <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
+              {userRole === "waiter" &&
+                pagesWaiter.map((page) => (
+                  <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           <Typography
@@ -146,15 +158,26 @@ function Navbar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => handleCloseNavMenu(page)}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            {userRole === "customer" &&
+              pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={() => handleCloseNavMenu(page)}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page}
+                </Button>
+              ))}
+            {userRole === "waiter" &&
+              pagesWaiter.map((page) => (
+                <Button
+                  key={page}
+                  onClick={() => handleCloseNavMenu(page)}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page}
+                </Button>
+              ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -179,14 +202,23 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {userRole === "customer" &&
+                settings.map((setting) => (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => handleCloseUserMenu(setting)}
+                  >
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              {userRole === "waiter" && (
                 <MenuItem
-                  key={setting}
-                  onClick={() => handleCloseUserMenu(setting)}
+                  key={"waiter"}
+                  onClick={() => handleCloseUserMenu("Logout")}
                 >
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
-              ))}
+              )}
             </Menu>
           </Box>
         </Toolbar>

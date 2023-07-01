@@ -35,6 +35,8 @@ const SpecificMenuListPage = lazy(() =>
   import("../pages/Specific Menu/SpecificMenuPage")
 );
 const MenuDetails = lazy(() => import("../pages/Specific Menu/MenuDetails"));
+const OrderPage = lazy(() => import("../pages/Order/OrderPage"));
+const AllOrders = lazy(() => import("../pages/Order/AllOrders"));
 
 const NotFound = lazy(() => import("../components/NotFound"));
 
@@ -119,6 +121,14 @@ const privateRoutes = [
   {
     path: "/menuDetails/:id",
     component: MenuDetails,
+  },
+  {
+    path: "/orders/:email&:role",
+    component: OrderPage,
+  },
+  {
+    path: "/allOrders",
+    component: AllOrders,
   },
 ];
 
