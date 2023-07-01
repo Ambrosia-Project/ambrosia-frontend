@@ -28,7 +28,6 @@ const Profile = lazy(() => import("../pages/Profile"));
 const BlogPage = lazy(() => import("../pages/BlogPage"));
 const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
 const CreateBlogPage = lazy(() => import("../pages/CreateBlogPage"));
-const AddPreferences = lazy(() => import("../pages/AddPreferences"));
 const AddAllergies = lazy(() => import("../pages/AddAllergies"));
 const MenuListPage = lazy(() => import("../pages/Menu List/MenuListPage"));
 const SpecificMenuListPage = lazy(() =>
@@ -99,13 +98,9 @@ const privateRoutes = [
     component: BlogDetailsPage,
     exact: true,
   },
+
   {
-    path: "/addpreferences",
-    component: AddPreferences,
-    exact: true,
-  },
-  {
-    path: "/addallergies",
+    path: "/addAllergies",
     component: AddAllergies,
     exact: true,
   },

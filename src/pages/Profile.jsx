@@ -1,5 +1,5 @@
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Avatar,
   Box,
@@ -13,14 +13,14 @@ import {
   Paper,
   Select,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import caesar from '../assets/images/caesar.png'
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import caesar from "../assets/images/caesar.png";
 
 import { makeStyles } from "@mui/styles";
-import authService from '../services/auth.service';
+import authService from "../services/auth.service";
 
 const useStyles = makeStyles((theme) => ({
   profilePictureContainer: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paperContainer: {
     marginTop: theme.spacing(2),
-    padding: "3% 7%"
+    padding: "3% 7%",
   },
   sectionContainer: {
     display: "flex",
@@ -96,7 +96,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
   },
 }));
-
 
 const Profile = () => {
   const classes = useStyles();
@@ -169,12 +168,14 @@ const Profile = () => {
 
   const handlePhotoUpload = (event) => {
     const file = event.target.files[0];
-    convertToBase64(file).then((res) => {
-      console.log(res);
-      setImage(res);
-    }).catch((err) => {
-      console.error(err);
-    });
+    convertToBase64(file)
+      .then((res) => {
+        console.log(res);
+        setImage(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handlePhotoChange = () => {
@@ -183,7 +184,7 @@ const Profile = () => {
 
   const handleDeleteAllegrgy = (allergy) => {
     setAllergicTo(allergicTo.filter((item) => item !== allergy));
-  }
+  };
   return (
     <CssBaseline>
       <Container maxWidth="md">
@@ -199,18 +200,33 @@ const Profile = () => {
           <input
             type="file"
             ref={inputFileRef}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             onChange={handlePhotoUpload}
-            accept='image/*'
+            accept="image/*"
           />
-          <IconButton sx={{ position: "relative", bottom: '70px', left: '55%', background: '#5E714E', "&:hover": { background: '#4E613E' } }} onClick={handlePhotoChange}>
-            <AddAPhotoIcon sx={{ color: '#fff' }} />
+          <IconButton
+            sx={{
+              position: "relative",
+              bottom: "70px",
+              left: "55%",
+              background: "#5E714E",
+              "&:hover": { background: "#4E613E" },
+            }}
+            onClick={handlePhotoChange}
+          >
+            <AddAPhotoIcon sx={{ color: "#fff" }} />
           </IconButton>
-          <Grid container sx={{ padding: '3% 7%' }}>
-            <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
-              <Typography variant="h6">
-                Email
-              </Typography>
+          <Grid container sx={{ padding: "3% 7%" }}>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Email</Typography>
             </Grid>
             <Grid item xs={8}>
               <TextField
@@ -235,10 +251,16 @@ const Profile = () => {
                 value={email}
               />
             </Grid>
-            <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
-              <Typography variant="h6">
-                Name
-              </Typography>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Name</Typography>
             </Grid>
             <Grid item xs={8}>
               <TextField
@@ -264,10 +286,16 @@ const Profile = () => {
                 required
               />
             </Grid>
-            <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
-              <Typography variant="h6">
-                Age
-              </Typography>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Age</Typography>
             </Grid>
             <Grid item xs={8}>
               <TextField
@@ -293,10 +321,16 @@ const Profile = () => {
                 value={age}
               />
             </Grid>
-            <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
-              <Typography variant="h6">
-                Most Allergic To
-              </Typography>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Most Allergic To</Typography>
             </Grid>
             <Grid item xs={8}>
               <Box sx={{ minWidth: 120, marginTop: "5px" }}>
@@ -309,7 +343,11 @@ const Profile = () => {
                     {allergicTo.map((ingredient) => (
                       <ListItem
                         secondaryAction={
-                          <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteAllegrgy(ingredient)}>
+                          <IconButton
+                            edge="end"
+                            aria-label="delete"
+                            onClick={() => handleDeleteAllegrgy(ingredient)}
+                          >
                             <DeleteIcon />
                           </IconButton>
                         }
@@ -325,18 +363,26 @@ const Profile = () => {
               <IconButton
                 aria-label="add"
                 onClick={() => {
-                  console.log("add");
+                  window.location.href = "/addAllergies";
                 }}
               >
-                <AddCircleOutlineIcon sx={{ fontSize: '2.5rem', textAlign: 'center' }} />
+                <AddCircleOutlineIcon
+                  sx={{ fontSize: "2.5rem", textAlign: "center" }}
+                />
               </IconButton>
             </Grid>
 
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                width: "100%",
+              }}
+            >
               <Button
                 variant="contained"
                 color="primary"
-                size='large'
+                size="large"
                 className={classes.saveButton}
                 onClick={handleSaveChanges}
                 sx={{ textTransform: "none" }}
@@ -347,7 +393,7 @@ const Profile = () => {
           </Grid>
         </Paper>
       </Container>
-    </CssBaseline >
+    </CssBaseline>
   );
 };
 
