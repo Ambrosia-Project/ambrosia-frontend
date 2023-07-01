@@ -136,6 +136,13 @@ const MenuDetails = () => {
         );
         setSnackbar(true);
         setSeverity("info");
+      } else if (res.data.isAddedToCart) {
+        setSnackbarMessage(
+          "This meal is already on your card. Please add more on order page!"
+        );
+        setSnackbar(true);
+        setSeverity("error");
+        setAdded(true);
       }
     }
     setLoading(false);
@@ -150,11 +157,6 @@ const MenuDetails = () => {
     console.log(res);
     if (res.status === 200) {
       window.location.reload();
-    } else if (res.status === 400) {
-      setSnackbarMessage("This meal is already on your card. Please add more on order page!");
-      setSnackbar(true);
-      setSeverity("error");
-      setAdded(true);
     }
   };
 
