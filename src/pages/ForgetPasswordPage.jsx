@@ -75,6 +75,12 @@ export default function RegisterInformationPage({ update, setUpdate }) {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+        handleLogin(e);
+    }
+};
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
@@ -153,6 +159,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                         handleLogin(e);
                       }
                     }}
+                    onKeyDown={handleKeyPress}
                   >
                     Continue
                   </Button>

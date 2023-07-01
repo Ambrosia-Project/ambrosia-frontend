@@ -114,6 +114,12 @@ export default function RegisterInformationPage({ update, setUpdate }) {
         setIngredientsList(event.target.value);
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleLogin(e);
+        }
+    };
+
     return (
         <CssBaseline>
             <Container fluid>
@@ -239,6 +245,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                                             handleLogin(e);
                                         }
                                     }}
+                                    onKeyDown={handleKeyPress}
                                 >
                                     I'm Hungry!
                                 </Button>
