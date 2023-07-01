@@ -24,10 +24,12 @@ const NewPasswordPage = lazy(() => import("../pages/NewPasswordPage"));
 const Navbar = lazy(() => import("../components/Navbar"));
 const LandingPage = lazy(() => import("../pages/LandingPage"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
+const Profile = lazy(() => import("../pages/Profile"));
 const BlogPage = lazy(() => import("../pages/BlogPage"));
 const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
 const CreateBlogPage = lazy(() => import("../pages/CreateBlogPage"));
 const AddPreferences = lazy(() => import("../pages/AddPreferences"));
+const AddAllergies = lazy(() => import("../pages/AddAllergies"));
 const MenuListPage = lazy(() => import("../pages/Menu List/MenuListPage"));
 const SpecificMenuListPage = lazy(() =>
   import("../pages/Specific Menu/SpecificMenuPage")
@@ -76,6 +78,11 @@ const privateRoutes = [
     exact: true,
   },
   {
+    path: "/profile",
+    component: Profile,
+    exact: true,
+  },
+  {
     path: "/blogs",
     component: BlogPage,
     exact: true,
@@ -93,6 +100,11 @@ const privateRoutes = [
   {
     path: "/addpreferences",
     component: AddPreferences,
+    exact: true,
+  },
+  {
+    path: "/addallergies",
+    component: AddAllergies,
     exact: true,
   },
   {
