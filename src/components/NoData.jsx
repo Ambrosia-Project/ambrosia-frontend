@@ -13,8 +13,8 @@ export default function NoData() {
             }}
         >
             <img src={nodata} alt="" style={{
-                width: '60%',
-                height: '60%',
+                width: '80%',
+                height: '80%',
                 objectFit: 'contain',
                 margin: '0 auto',
             }}
