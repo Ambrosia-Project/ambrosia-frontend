@@ -24,15 +24,6 @@ const theme = createTheme({
   }
 });
 
-const allergicIngredients = [
-  "Milk",
-  "Egg",
-  "Fish",
-  "Crustacean shellfish",
-  "Tree nuts",
-  "Peanuts",
-]
-
 export default function RegisterInformationPage({ update, setUpdate }) {
 
   const classes = useStyles();

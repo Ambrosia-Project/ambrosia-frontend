@@ -1,6 +1,6 @@
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  Alert,
   Avatar,
   Box,
   Button,
@@ -12,15 +12,15 @@ import {
   ListItem,
   Paper,
   Select,
-  Snackbar,
   TextField,
   Typography
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-
+import React, { useEffect, useRef, useState } from "react";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import caesar from '../assets/images/caesar.png'
 
 import { makeStyles } from "@mui/styles";
+import authService from '../services/auth.service';
 
 const useStyles = makeStyles((theme) => ({
   profilePictureContainer: {
@@ -97,27 +97,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const allergicTo = [
-  "Milk",
-  "Eggs",
-  "Fish",
-]
 
 const Profile = () => {
   const classes = useStyles();
 
+  const [image, setImage] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [age, setAge] = useState("");
-  //const [allergicTo, setAllergicTo] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [selectedAllergen, setSelectedAllergen] = useState("");
+  const [allergicTo, setAllergicTo] = useState([]);
 
-  const [editing, setEditing] = useState({
-    username: false,
-    age: false,
-    allergicTo: false,
-  });
+  const inputFileRef = useRef(null);
 
   useEffect(() => {
     fetchData();
@@ -129,73 +119,93 @@ const Profile = () => {
       const user = JSON.parse(storedUser);
       setEmail(user.email);
       setUsername(user.name);
-      setAge(user.age.toString());
-      //setAllergicTo(user.allergies.join(", "));
+      setAge(user.age);
+      setAllergicTo(user.allergies);
+      setImage(user.image);
     }
   };
 
-  const handleEdit = (section) => {
-    setEditing((prevState) => ({
-      ...prevState,
-      [section]: true,
-    }));
-  };
+  React.useEffect(() => {
+    fetchData();
+  }, []);
 
-  const handleAllergenChange = (event) => {
-    setSelectedAllergen(event.target.value);
-  };
-
-  const handleInputChange = (event, section) => {
-    const value = event.target.value;
-
-    switch (section) {
-      case "username":
-        setUsername(value);
-        break;
-      case "age":
-        setAge(value);
-        break;
-      case "allergicTo":
-        //setAllergicTo(value);
-        break;
-      default:
-        break;
-    }
+  const handleAddAllergy = () => {
+    window.location.href = "/profile/addAllergy";
   };
 
   const handleSaveChanges = () => {
-    const updatedUserInfo = {
+    const user = {
+      image: image,
       email: email,
-      age: parseInt(age),
       name: username,
-      allergies: allergicTo.split(",").map((item) => item.trim()),
+      age: age,
+      allergies: allergicTo,
+      role: JSON.parse(localStorage.getItem("user")).role,
     };
-
-    localStorage.setItem("user", JSON.stringify(updatedUserInfo));
-
-    setEditing({
-      username: false,
-      age: false,
-      allergicTo: false,
+    console.log(user.image);
+    authService.updateProfile(user).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        localStorage.setItem("user", JSON.stringify(user));
+        window.location.href = "/profile";
+      }
     });
-    setSnackbarOpen(true);
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
 
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files[0];
+    convertToBase64(file).then((res) => {
+      console.log(res);
+      setImage(res);
+    }).catch((err) => {
+      console.error(err);
+    });
+  };
+
+  const handlePhotoChange = () => {
+    inputFileRef.current.click();
+  };
+
+  const handleDeleteAllegrgy = (allergy) => {
+    setAllergicTo(allergicTo.filter((item) => item !== allergy));
+  }
   return (
     <CssBaseline>
       <Container maxWidth="md">
         <Paper elevation={3} className={classes.paperContainer}>
           <Avatar
             className={classes.profilePicture}
-            src="/path/to/avatar.jpg"
+            src={image}
             sx={{
               margin: "5% auto",
             }}
           />
+
+          <input
+            type="file"
+            ref={inputFileRef}
+            style={{ display: 'none' }}
+            onChange={handlePhotoUpload}
+            accept='image/*'
+          />
+          <IconButton sx={{ position: "relative", bottom: '70px', left: '55%', background: '#5E714E', "&:hover": { background: '#4E613E' } }} onClick={handlePhotoChange}>
+            <AddAPhotoIcon sx={{ color: '#fff' }} />
+          </IconButton>
           <Grid container sx={{ padding: '3% 7%' }}>
             <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
               <Typography variant="h6">
@@ -222,7 +232,7 @@ const Profile = () => {
                 margin="dense"
                 type="email"
                 fullWidth
-                required
+                value={email}
               />
             </Grid>
             <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
@@ -248,7 +258,8 @@ const Profile = () => {
                   },
                 }}
                 margin="dense"
-                type="email"
+                type="text"
+                value={username}
                 fullWidth
                 required
               />
@@ -279,6 +290,7 @@ const Profile = () => {
                 type="number"
                 fullWidth
                 required
+                value={age}
               />
             </Grid>
             <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
@@ -297,7 +309,7 @@ const Profile = () => {
                     {allergicTo.map((ingredient) => (
                       <ListItem
                         secondaryAction={
-                          <IconButton edge="end" aria-label="delete">
+                          <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteAllegrgy(ingredient)}>
                             <DeleteIcon />
                           </IconButton>
                         }
@@ -332,23 +344,10 @@ const Profile = () => {
                 Save Changes
               </Button>
             </Box>
-            <Snackbar
-              open={snackbarOpen}
-              autoHideDuration={3000}
-              onClose={handleSnackbarClose}
-            >
-              <Alert
-                onClose={handleSnackbarClose}
-                severity="success"
-                sx={{ width: "100%" }}
-              >
-                Changes saved successfully!
-              </Alert>
-            </Snackbar>
           </Grid>
         </Paper>
       </Container>
-    </CssBaseline>
+    </CssBaseline >
   );
 };
 
