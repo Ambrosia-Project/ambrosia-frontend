@@ -14,7 +14,8 @@ const getMenuList = async (menuName) => {
   return res;
 };
 const getFilteredMenu = async (props) => {
-  const res = await Request("post", API_URL + "/menu/filter/", props);
+  let newProps = { ...props, email: user.email };
+  const res = await Request("post", API_URL + "/menu/filter/", newProps);
   console.log(res);
   return res;
 };
