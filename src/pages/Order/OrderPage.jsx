@@ -278,10 +278,15 @@ function OrderPage() {
                   <Button
                     variant="contained"
                     className={classes.orderButton}
-                    style={{ backgroundColor: "red" }}
                     disableElevation
                     size="large"
                     onClick={handleCompleteNow}
+                    style={{
+                      backgroundColor: "#B82626",
+                      "&:hover": {
+                        backgroundColor: "#8A1D1D",
+                      },
+                    }}
                   >
                     Complete Now
                   </Button>

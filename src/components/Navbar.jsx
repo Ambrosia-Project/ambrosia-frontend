@@ -54,6 +54,8 @@ function Navbar() {
       window.location.reload();
     } else if (setting === "Order" && userRole !== "waiter") {
       window.location.href = `/orders/${user.email}&customer`;
+    } else if (setting === "Profile" && userRole !== "waiter") {
+      window.location.href = `/profile`;
     }
   };
 

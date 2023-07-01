@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
   warningIcon: {
     marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(-.7),
+    marginBottom: theme.spacing(-0.7),
     color: theme.palette.warning.main,
     flexShrink: 0,
   },
@@ -109,7 +109,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     fontFamily: "Poppins",
     textAlign: "right",
-   
   },
 }));
 
@@ -121,6 +120,7 @@ const MenuDetails = () => {
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [severity, setSeverity] = useState("info");
+  const [added, setAdded] = useState(false);
   const role = SessionHelper.getUser().role;
 
   const classes = useStyles();
@@ -148,6 +148,14 @@ const MenuDetails = () => {
   const handleClick = async () => {
     const res = await orderService.addToCart(quantity, id);
     console.log(res);
+    if (res.status === 200) {
+      window.location.reload();
+    } else if (res.status === 400) {
+      setSnackbarMessage("This meal is already on your card. Please add more on order page!");
+      setSnackbar(true);
+      setSeverity("error");
+      setAdded(true);
+    }
   };
 
   const handleIncrement = () => {
@@ -258,8 +266,7 @@ const MenuDetails = () => {
                           display="inline-block"
                         >
                           <ErrorOutline className={classes.warningIcon} />
-                          Allergenic substance(s) alert! Please be
-                          careful!
+                          Allergenic substance(s) alert! Please be careful!
                         </span>
                       </div>
                     </Box>
@@ -278,7 +285,7 @@ const MenuDetails = () => {
                           variant="contained"
                           color="primary"
                           onClick={handleDecrement}
-                          disabled={menuDetails.hasOrdered}
+                          disabled={menuDetails.hasOrdered && added}
                           style={{
                             minWidth: "2rem",
                             padding: "0",
@@ -294,7 +301,7 @@ const MenuDetails = () => {
                           variant="contained"
                           color="primary"
                           onClick={handleIncrement}
-                          disabled={menuDetails.hasOrdered}
+                          disabled={menuDetails.hasOrdered && added}
                           style={{
                             minWidth: "2rem",
                             padding: "0",
@@ -310,7 +317,7 @@ const MenuDetails = () => {
                         endIcon={<ShoppingCart style={{ color: "#EEBA2B" }} />}
                         style={{ backgroundColor: "#5E714E" }}
                         onClick={handleClick}
-                        disabled={menuDetails.hasOrdered}
+                        disabled={menuDetails.hasOrdered && added}
                       >
                         Add to cart
                       </Button>

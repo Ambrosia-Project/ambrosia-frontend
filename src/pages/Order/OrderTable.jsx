@@ -49,50 +49,89 @@ function OrderTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderItems?.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell sx={{ padding: { xs: 0, md: 2 } }}>
-                  {item.menu.imageFile !== "empty" ? (
-                    <img
-                      src={decodeBase64Image(item.menu.imageFile)}
-                      alt={item.menu.meal_name}
-                      className={classes.mealImage}
-                    />
-                  ) : (
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      height={80}
-                      bgcolor="#f5f5f5"
-                      color="#999999"
-                      borderRadius="1rem"
-                      width={80}
-                      marginRight={0.5}
-                    >
-                      <Typography>No Photo</Typography>
-                    </Box>
-                  )}
-                </TableCell>
+            {orderItems.length > 0 &&
+              orderItems?.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell sx={{ padding: { xs: 0, md: 2 } }}>
+                    {item.menu.imageFile !== "empty" ? (
+                      <img
+                        src={decodeBase64Image(item.menu.imageFile)}
+                        alt={item.menu.meal_name}
+                        className={classes.mealImage}
+                      />
+                    ) : (
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        height={80}
+                        bgcolor="#f5f5f5"
+                        color="#999999"
+                        borderRadius="1rem"
+                        width={80}
+                        marginRight={0.5}
+                      >
+                        <Typography>No Photo</Typography>
+                      </Box>
+                    )}
+                  </TableCell>
 
-                <TableCell>
-                  <Typography className={classes.mealName}>
-                    {item.menu.meal_name}
-                  </Typography>
-                  <Typography className={classes.extraType}>
-                    {item.menu.extra_type}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <div className={classes.quantityContainer}>
-                    {role !== "waiter" && (
+                  <TableCell>
+                    <Typography className={classes.mealName}>
+                      {item.menu.meal_name}
+                    </Typography>
+                    <Typography className={classes.extraType}>
+                      {item.menu.extra_type}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <div className={classes.quantityContainer}>
+                      {role !== "waiter" && (
+                        <IconButton
+                          size="small"
+                          className={classes.quantityButton}
+                          disabled={data.hasOrdered}
+                          onClick={() => handleDecreaseQuantity(item.menu.id)}
+                        >
+                          <Remove
+                            style={{
+                              color: data.hasOrdered
+                                ? "rgba(0, 0, 0, 0.2)"
+                                : "red",
+                            }}
+                          />
+                        </IconButton>
+                      )}
+                      <Typography className={classes.quantityText}>
+                        {item.quantity}
+                      </Typography>
+                      {role !== "waiter" && (
+                        <IconButton
+                          size="small"
+                          className={classes.quantityButton}
+                          disabled={data.hasOrdered}
+                          onClick={() => handleIncreaseQuantity(item.menu.id)}
+                        >
+                          <Add
+                            style={{
+                              color: data.hasOrdered
+                                ? "rgba(0, 0, 0, 0.2)"
+                                : "green",
+                            }}
+                          />
+                        </IconButton>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>{item.menu.price * item.quantity}€</TableCell>
+                  {role !== "waiter" && (
+                    <TableCell>
                       <IconButton
                         size="small"
-                        className={classes.quantityButton}
+                        onClick={() => handleDeleteItem(item.menu.id)}
                         disabled={data.hasOrdered}
-                        onClick={() => handleDecreaseQuantity(item.menu.id)}
                       >
-                        <Remove
+                        <Delete
                           style={{
                             color: data.hasOrdered
                               ? "rgba(0, 0, 0, 0.2)"
@@ -100,47 +139,10 @@ function OrderTable({
                           }}
                         />
                       </IconButton>
-                    )}
-                    <Typography className={classes.quantityText}>
-                      {item.quantity}
-                    </Typography>
-                    {role !== "waiter" && (
-                      <IconButton
-                        size="small"
-                        
-                        className={classes.quantityButton}
-                        disabled={data.hasOrdered}
-                        onClick={() => handleIncreaseQuantity(item.menu.id)}
-                      >
-                        <Add
-                          style={{
-                            color: data.hasOrdered
-                              ? "rgba(0, 0, 0, 0.2)"
-                              : "green",
-                          }}
-                        />
-                      </IconButton>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>{item.menu.price * item.quantity}€</TableCell>
-                {role !== "waiter" && (
-                  <TableCell>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleDeleteItem(item.menu.id)}
-                      disabled={data.hasOrdered}
-                    >
-                      <Delete
-                        style={{
-                          color: data.hasOrdered ? "rgba(0, 0, 0, 0.2)" : "red",
-                        }}
-                      />
-                    </IconButton>
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
