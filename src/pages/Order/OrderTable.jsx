@@ -84,7 +84,7 @@ function OrderTable({
                       {item.menu.extra_type}
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">
                     <div className={classes.quantityContainer}>
                       {role !== "waiter" && (
                         <IconButton

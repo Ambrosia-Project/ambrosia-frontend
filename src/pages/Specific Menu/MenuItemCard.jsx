@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { MonetizationOn, ErrorOutline } from "@mui/icons-material";
+import { EuroSymbolOutlined, ErrorOutline } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -160,8 +160,8 @@ const MenuItemCard = ({ menuItem }) => {
             </Typography>
 
             <Typography className={classes.priceText}>
-              <MonetizationOn className={classes.priceIcon} />
               {menuItem.price}
+              <EuroSymbolOutlined fontSize="small" className={classes.priceIcon} />
             </Typography>
           </Grid>
         </Grid>

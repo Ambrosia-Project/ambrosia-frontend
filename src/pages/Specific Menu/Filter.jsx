@@ -108,11 +108,15 @@ const Filter = ({
                 value={mealType}
                 onChange={(e) => setMealType(e.target.value)}
               >
-                <MenuItem value="" disabled>
+                <MenuItem value="" disabled key={"meal-types"}>
                   All Meal Types
                 </MenuItem>
                 {constants.mealTypes.map((obj) => {
-                  return <MenuItem value={obj.value}>{obj.name}</MenuItem>;
+                  return (
+                    <MenuItem value={obj.value} key={obj}>
+                      {obj.name}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -122,11 +126,11 @@ const Filter = ({
                 value={allergyType}
                 onChange={(e) => setAllergyType(e.target.value)}
               >
-                <MenuItem value="" disabled>
+                <MenuItem value="" disabled key={"meal-types"}>
                   All Allergy Types
                 </MenuItem>
                 {constants.allergyTypes.map((obj) => {
-                  return <MenuItem value={obj.value}>{obj.name}</MenuItem>;
+                  return <MenuItem value={obj.value} key={obj}>{obj.name}</MenuItem>;
                 })}
               </Select>
             </FormControl>
@@ -136,11 +140,15 @@ const Filter = ({
                 value={priceRange}
                 onChange={(e) => setPriceRange(e.target.value)}
               >
-                <MenuItem value="" disabled>
+                <MenuItem value="" disabled key={"price-ranges"}>
                   All Price Ranges
                 </MenuItem>
                 {constants.priceRange.map((obj) => {
-                  return <MenuItem value={obj.value}>{obj.name}</MenuItem>;
+                  return (
+                    <MenuItem value={obj.value} key={obj}>
+                      {obj.name}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>

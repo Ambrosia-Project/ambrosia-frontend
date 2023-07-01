@@ -3,7 +3,6 @@ import { Button, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
 
 export default function BlogListItem({ blog }) {
-    console.log(blog);
     return (
         <Paper elevation={3} sx={{ margin: '3%', padding: '5%' }}>
             <Grid container spacing={3}>

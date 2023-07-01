@@ -14,10 +14,10 @@ import * as React from "react";
 import authService from "../services/auth.service";
 import secondLogo from "../assets/images/secondLogo.png";
 import SessionHelper from "../helpers/SessionHelper";
-import Badge from '@mui/material/Badge';
-import { ThemeProvider, styled } from '@mui/material/styles';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { createTheme } from '@mui/material/styles';
+import Badge from "@mui/material/Badge";
+import { ThemeProvider, styled } from "@mui/material/styles";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { createTheme } from "@mui/material/styles";
 import orderService from "../services/order.service";
 
 const theme = createTheme({
@@ -26,23 +26,22 @@ const theme = createTheme({
       main: "#EEBA2B",
     },
     secondary: {
-      light: '#ff7961',
-      main: '#f44336',
-      dark: '#ba000d',
-      contrastText: '#000',
+      light: "#ff7961",
+      main: "#f44336",
+      dark: "#ba000d",
+      contrastText: "#000",
     },
   },
 });
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
+  "& .MuiBadge-badge": {
     right: -3,
     top: 13,
     border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
+    padding: "0 4px",
   },
 }));
-
 
 const pages = ["Menus", "Blog", "Create Blog"];
 const pagesWaiter = ["Menus", "Blog", "Orders"];
@@ -111,7 +110,7 @@ function Navbar() {
 
   const handleOrder = () => {
     window.location.href = `/orders/${user.email}&customer`;
-  }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -149,7 +148,7 @@ function Navbar() {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
-                color="inherit"
+                style={{ color: "white" }}
               >
                 <MenuIcon />
               </IconButton>
@@ -173,13 +172,19 @@ function Navbar() {
               >
                 {userRole === "customer" &&
                   pages.map((page) => (
-                    <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                    <MenuItem
+                      key={page}
+                      onClick={() => handleCloseNavMenu(page)}
+                    >
                       <Typography textAlign="center">{page}</Typography>
                     </MenuItem>
                   ))}
                 {userRole === "waiter" &&
                   pagesWaiter.map((page) => (
-                    <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                    <MenuItem
+                      key={page}
+                      onClick={() => handleCloseNavMenu(page)}
+                    >
                       <Typography textAlign="center">{page}</Typography>
                     </MenuItem>
                   ))}
@@ -197,7 +202,7 @@ function Navbar() {
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
-                color: "inherit",
+                color: "white",
                 textDecoration: "none",
               }}
             >
@@ -237,16 +242,18 @@ function Navbar() {
                 ))}
             </Box>
 
-
             <Box sx={{ flexGrow: 0 }}>
-              {
-                userRole === "customer" && (
-                  <IconButton aria-label="cart" sx={{ marginRight: '20px' }}>
-                    <StyledBadge badgeContent={orderCount} color="primary" onClick={handleOrder}>
-                      <ShoppingCartIcon sx={{ color: '#fff' }} />
-                    </StyledBadge>
-                  </IconButton>
-                )}
+              {userRole === "customer" && (
+                <IconButton
+                  aria-label="cart"
+                  sx={{ marginRight: "20px" }}
+                  onClick={handleOrder}
+                >
+                  <StyledBadge badgeContent={orderCount} color="primary">
+                    <ShoppingCartIcon sx={{ color: "#fff" }} />
+                  </StyledBadge>
+                </IconButton>
+              )}
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="userImage" src={profileImage} />

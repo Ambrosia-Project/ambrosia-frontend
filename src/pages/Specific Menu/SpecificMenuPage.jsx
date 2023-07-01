@@ -39,7 +39,6 @@ function SpecificMenuPage() {
   const init = useCallback(async () => {
     setLoading(true);
     const res = await menuListService.getMenuList(name);
-    console.log(res);
     if (res?.status === 200) {
       setMenuItemsArray(res.data);
     }
@@ -69,12 +68,11 @@ function SpecificMenuPage() {
     let propsTemp = { ...props, keyword: srchText };
     setProps(propsTemp);
     const res = await menuListService.getFilteredMenu(propsTemp);
-    setMenuItemsArray(res.data.data);
+    setMenuItemsArray(res.data);
     setLoading(false);
   };
 
   const handleSearch = (srchText) => {
-    console.log("Search text:", srchText);
     setSearchText(srchText);
     applySearch(srchText);
   };
@@ -90,9 +88,8 @@ function SpecificMenuPage() {
       },
     };
     setProps(propsTemp);
-    console.log(propsTemp);
     const res = await menuListService.getFilteredMenu(propsTemp);
-    setMenuItemsArray(res.data.data);
+    setMenuItemsArray(res.data);
     setLoading(false);
   };
 
@@ -108,7 +105,7 @@ function SpecificMenuPage() {
     };
     setProps(propsTemp);
     const res = await menuListService.getFilteredMenu(propsTemp);
-    setMenuItemsArray(res.data.data);
+    setMenuItemsArray(res.data);
     setLoading(false);
   };
 
@@ -127,7 +124,7 @@ function SpecificMenuPage() {
             justifyContent="flex-end"
             paddingRight={2}
           >
-            <HelperIcon text="You can search by clicking the search icon or by pressing enter. Also, you can apply filter(s) by using filter" />
+            <HelperIcon text="You can search by clicking the search icon or by pressing enter. Also, you can apply/clear filter(s) throughout filtering" />
           </Box>
           <Grid
             container
@@ -182,7 +179,7 @@ function SpecificMenuPage() {
                     style={{ color: "#999", justifyContent: "center" }}
                   />
                 </div>
-              ) : menuItemsArray.length === 0 ? (
+              ) : menuItemsArray?.length === 0 ? (
                 <Typography variant="body1" align="center" sx={{ mt: 4 }}>
                   No menu items found
                 </Typography>
@@ -191,14 +188,16 @@ function SpecificMenuPage() {
                   container
                   spacing={3}
                   justifyContent={
-                    menuItemsArray.length === 1 ? "center" : "flex-start"
+                    menuItemsArray?.length === 1 ? "center" : "flex-start"
                   }
                 >
-                  {menuItemsArray.map((menuItem) => (
-                    <Grid item key={menuItem.id} xs={12} sm={6} md={6} lg={6}>
-                      <MenuItemCard menuItem={menuItem} />
-                    </Grid>
-                  ))}
+                  {menuItemsArray?.map((menuItem) => {
+                    return (
+                      <Grid item key={menuItem.id} xs={12} sm={6} md={6} lg={6}>
+                        <MenuItemCard menuItem={menuItem} />
+                      </Grid>
+                    );
+                  })}
                 </Grid>
               )}
             </Grid>

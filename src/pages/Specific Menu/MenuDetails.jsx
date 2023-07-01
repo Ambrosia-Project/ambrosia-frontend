@@ -7,6 +7,7 @@ import {
   Typography,
   CircularProgress,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { RestaurantMenu, ShoppingCart } from "@mui/icons-material";
@@ -30,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   menuImage: {
-    width: "100%",
-    height: "auto",
     objectFit: "cover",
   },
   noPhotoImage: {
@@ -73,8 +72,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
   priceText: {
-    // marginRight: "0.5rem",
-    // marginRight: theme.spacing(1.5),
     display: "flex",
     alignItems: "right",
     marginBottom: "1rem",
@@ -121,9 +118,15 @@ const MenuDetails = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [severity, setSeverity] = useState("info");
   const [added, setAdded] = useState(false);
-  const role = SessionHelper.getUser().role;
+  const user = SessionHelper.getUser();
+  const role = user.role;
 
   const classes = useStyles();
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const smallMatches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  useEffect(() => {
+    console.log(matches);
+  }, [matches]);
 
   const fetchMenuDetails = useCallback(async () => {
     setLoading(true);
@@ -156,7 +159,7 @@ const MenuDetails = () => {
     const res = await orderService.addToCart(quantity, id);
     console.log(res);
     if (res.status === 200) {
-      window.location.reload();
+      window.location.href = `/orders/${user.email}&customer`;
     }
   };
 
@@ -189,7 +192,7 @@ const MenuDetails = () => {
             justifyContent="flex-end"
             paddingRight={2}
           >
-            <HelperIcon text="You can see the full details of the chosen meal. You can add the chosen meal to the cart by clicking the button below!" />
+            <HelperIcon text="You can see the full details of the chosen meal. You can add the chosen meal to the cart by clicking the button below and you can change the quantity as you wish!" />
           </Box>
           {loading ? (
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -224,6 +227,13 @@ const MenuDetails = () => {
                     src={`data:image/jpeg;base64,${menuDetails.imageFile}`}
                     alt={menuDetails.meal_name}
                     className={classes.menuImage}
+                    style={
+                      smallMatches
+                        ? { width: "100%", height: 400 }
+                        : matches
+                        ? { width: "100%", height: 500 }
+                        : { width: "100%", height: 700 }
+                    }
                   />
                 ) : (
                   <div className={classes.noPhotoImage}>
@@ -233,29 +243,42 @@ const MenuDetails = () => {
                   </div>
                 )}
               </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="h6" className={classes.ingredientsTitle}>
-                  Ingredients:
-                </Typography>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div>
+                  <Typography variant="h6" className={classes.ingredientsTitle}>
+                    Ingredients:
+                  </Typography>
 
-                <div className={classes.ingredientsList}>
-                  {menuDetails.ingredients &&
-                    menuDetails.ingredients
-                      .split(",")
-                      .map((ingredient, index) => (
-                        <div key={index} className={classes.ingredientItem}>
-                          <RestaurantMenu className={classes.ingredientIcon} />
-                          <Typography>{ingredient.trim()}</Typography>
-                        </div>
-                      ))}
+                  <div className={classes.ingredientsList}>
+                    {menuDetails.ingredients &&
+                      menuDetails.ingredients
+                        .split(",")
+                        .map((ingredient, index) => (
+                          <div key={index} className={classes.ingredientItem}>
+                            <RestaurantMenu
+                              className={classes.ingredientIcon}
+                            />
+                            <Typography>{ingredient.trim()}</Typography>
+                          </div>
+                        ))}
+                  </div>
+                  <Divider style={{ width: "100%" }} />
+                  <Typography variant="h6" className={classes.typeTitle}>
+                    Type:
+                  </Typography>
+                  <Typography className={classes.extraType}>
+                    {menuDetails.extra_type}
+                  </Typography>
                 </div>
-                <Divider style={{ width: "100%" }} />
-                <Typography variant="h6" className={classes.typeTitle}>
-                  Type:
-                </Typography>
-                <Typography className={classes.extraType}>
-                  {menuDetails.extra_type}
-                </Typography>
 
                 <div style={{ marginTop: "3rem" }}>
                   {role === "customer" && menuDetails.isAllergic && (
@@ -287,7 +310,9 @@ const MenuDetails = () => {
                           variant="contained"
                           color="primary"
                           onClick={handleDecrement}
-                          disabled={menuDetails.hasOrdered && added}
+                          disabled={
+                            menuDetails.hasOrdered || menuDetails.isAddedToCart
+                          }
                           style={{
                             minWidth: "2rem",
                             padding: "0",
@@ -303,7 +328,9 @@ const MenuDetails = () => {
                           variant="contained"
                           color="primary"
                           onClick={handleIncrement}
-                          disabled={menuDetails.hasOrdered && added}
+                          disabled={
+                            menuDetails.hasOrdered || menuDetails.isAddedToCart
+                          }
                           style={{
                             minWidth: "2rem",
                             padding: "0",
@@ -319,7 +346,9 @@ const MenuDetails = () => {
                         endIcon={<ShoppingCart style={{ color: "#EEBA2B" }} />}
                         style={{ backgroundColor: "#5E714E" }}
                         onClick={handleClick}
-                        disabled={menuDetails.hasOrdered && added}
+                        disabled={
+                          menuDetails.hasOrdered || menuDetails.isAddedToCart
+                        }
                       >
                         Add to cart
                       </Button>

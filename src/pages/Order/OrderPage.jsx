@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
   },
   quantityContainer: {
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-start",
+    alignItems: "left",
     marginRight: theme.spacing(2),
   },
   quantityButton: {

@@ -3,14 +3,13 @@ import SessionHelper from "../helpers/SessionHelper";
 
 const API_URL = "menuController";
 const user = SessionHelper.getUser();
-console.log(user);
 
 const getMenuList = async (menuName) => {
-  console.log(menuName);
   const res = await Request("post", API_URL + "/menu/", {
     email: user.email,
     type: menuName,
   });
+  console.log(res);
   return res;
 };
 const getFilteredMenu = async (props) => {
@@ -24,7 +23,6 @@ const getMenuDetails = async (id_) => {
     id: id_,
     email: user.email,
   });
-  console.log(res);
   return res;
 };
 
