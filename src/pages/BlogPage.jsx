@@ -11,6 +11,7 @@ import NoData from "../components/NoData";
 import blogService from "../services/blog.service";
 import BlogListItem from "./BlogListItem";
 import CustomSnackbar from "../components/Snackbar";
+import Loading from "../components/Loading";
 
 export default function BlogPage() {
   const [data, setData] = useState([]);
@@ -46,19 +47,7 @@ export default function BlogPage() {
     <CssBaseline>
       <Container justifyContent="center">
         {loading ? (
-          <Container
-            style={{
-              height: "100vh",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#5E714E",
-              fontFamily: "Poppins",
-            }}
-          >
-            <CircularProgress color="inherit" />
-          </Container>
+          <Loading />
         ) : (
           <>
             <List>

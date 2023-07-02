@@ -1,6 +1,7 @@
-import { Box, CircularProgress, Container, CssBaseline, Grid, Paper, Typography } from "@mui/material";
+import { Box, Container, CssBaseline, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import blogService from "../services/blog.service";
+import Loading from "../components/Loading";
 
 export default function BlogDetailsPage() {
   const [blog, setBlog] = React.useState({});
@@ -12,27 +13,17 @@ export default function BlogDetailsPage() {
     blogService.getBlogById(id).then((res) => {
       setBlog(res?.data);
       console.log(res);
-      setLoading(false);
+    }).catch((err) => {
+      console.log(err);
     });
+    setLoading(false);
   }, []);
 
   return (
     <CssBaseline>
       <Container>
         {
-          loading ? (<Container
-            style={{
-              height: "100vh",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#5E714E",
-              fontFamily: "Poppins",
-            }}
-          >
-            <CircularProgress color="inherit" />
-          </Container>
+          loading ? (<Loading />
           ) : (<Paper elevation={3} sx={{ margin: "3%", padding: "5%" }}>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={12}>
