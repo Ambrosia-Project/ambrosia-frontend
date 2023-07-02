@@ -248,6 +248,7 @@ const Profile = () => {
                 margin="dense"
                 type="email"
                 fullWidth
+                disabled
                 value={email}
               />
             </Grid>
