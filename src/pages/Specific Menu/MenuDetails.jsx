@@ -124,9 +124,7 @@ const MenuDetails = () => {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const smallMatches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  useEffect(() => {
-    console.log(matches);
-  }, [matches]);
+
 
   const fetchMenuDetails = useCallback(async () => {
     setLoading(true);

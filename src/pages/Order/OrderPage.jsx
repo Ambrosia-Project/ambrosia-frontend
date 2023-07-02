@@ -17,6 +17,7 @@ import HelperIcon from "../../components/HelpIcon";
 import { makeStyles } from "@mui/styles";
 import orderService from "../../services/order.service";
 import CustomSnackbar from "../../components/Snackbar";
+import SessionHelper from "../../helpers/SessionHelper";
 
 const useStyles = makeStyles((theme) => ({
   menuName: {
@@ -110,6 +111,8 @@ function OrderPage() {
   const [severity, setSeverity] = useState("info");
   const classes = useStyles();
 
+  const user = SessionHelper.getUser();
+
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     await orderService.getAllOrders();
@@ -117,6 +120,7 @@ function OrderPage() {
     console.log(res);
     if (res.status === 200) {
       setOrderItems(res.data.content);
+      updateLocal(res.data.content);
       setData(res.data);
       if (res.data.hasOrdered && role === "customer") {
         setSnackbarMessage(
@@ -137,39 +141,48 @@ function OrderPage() {
     fetchOrders();
   }, [fetchOrders]);
 
+  const updateLocal = (arr) => {
+    const temp = user;
+    temp.order = arr;
+    SessionHelper.setUser(temp);
+  };
+
   const handleDeleteItem = (itemId) => {
     console.log(orderItems);
     setOrderItems((prevItems) =>
       prevItems.filter((item) => item.menu.id !== itemId)
     );
-    orderService.deleteOrder(itemId).then((res) => {
-      console.log(res);
-      window.location.reload();
-    }).catch((err) => {
-      console.log(err);
-    });
+    orderService
+      .deleteOrder(itemId)
+      .then((res) => {
+        console.log(res);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleDecreaseQuantity = (itemId) => {
-    setOrderItems((prevItems) =>
-      prevItems.map((item) => {
-        if (item.menu.id === itemId && item.quantity > 1) {
-          return { ...item, quantity: item.quantity - 1 };
-        }
-        return item;
-      })
-    );
+    let decreasedArray = orderItems.map((item) => {
+      if (item.menu.id === itemId && item.quantity > 1) {
+        return { ...item, quantity: item.quantity - 1 };
+      }
+      return item;
+    });
+    setOrderItems(decreasedArray);
+    updateLocal(decreasedArray);
   };
 
   const handleIncreaseQuantity = (itemId) => {
-    setOrderItems((prevItems) =>
-      prevItems.map((item) => {
-        if (item.menu.id === itemId) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      })
-    );
+    let increasedArray = orderItems.map((item) => {
+      if (item.menu.id === itemId) {
+        return { ...item, quantity: item.quantity + 1 };
+      }
+      return item;
+    });
+    setOrderItems(increasedArray);
+    updateLocal(increasedArray);
   };
 
   const handleOrderNow = async () => {
@@ -261,7 +274,7 @@ function OrderPage() {
               <OrderTable
                 role={role}
                 classes={classes}
-                orderItems={orderItems}
+                orderItems={user.order}
                 data={data}
                 handleDecreaseQuantity={handleDecreaseQuantity}
                 handleIncreaseQuantity={handleIncreaseQuantity}

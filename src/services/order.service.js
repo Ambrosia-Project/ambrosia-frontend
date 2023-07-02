@@ -38,9 +38,9 @@ const getAllOrders = async () => {
 };
 
 const deleteOrder = async (id) => {
-  const res = await Request("post", API_URL + "/order/delete/", {
-    id: user.email,
-    mealId: id,
+  const res = await Request("delete", API_URL + "/order/delete/", {
+    email: user.email,
+    id: id,
   });
   return res;
 };

@@ -49,7 +49,7 @@ function OrderTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderItems.length > 0 &&
+            {orderItems?.length > 0 &&
               orderItems?.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell sx={{ padding: { xs: 0, md: 2 } }}>
@@ -152,7 +152,7 @@ function OrderTable({
                 Total Price:
               </TableCell>
               <TableCell align="center" className={classes.totalPriceValue}>
-                {orderItems.reduce(
+                {orderItems?.reduce(
                   (total, item) => total + item.menu.price * item.quantity,
                   0
                 )}
