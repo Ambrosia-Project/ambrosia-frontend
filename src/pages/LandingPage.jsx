@@ -7,7 +7,7 @@ const LandingPage = (props) => {
   console.log("LoggedIn = ", isLoggedIn);
   if (isLoggedIn) {
     history.push("dashboard");
-  } else history.push("login");
+  } else history.push("landing");
 
   return <></>;
 };
