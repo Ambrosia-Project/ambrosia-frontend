@@ -168,18 +168,6 @@ export default function MetroBoomin() {
 
   const [contentIndex, setContentIndex] = useState(0);
 
-  const handlePrevClick = () => {
-    setContentIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : testimonialPeople.length - 1
-    );
-  };
-
-  const handleNextClick = () => {
-    setContentIndex((prevIndex) =>
-      prevIndex < testimonialPeople.length - 1 ? prevIndex + 1 : 0
-    );
-  };
-
   const handleClick = () => {
     window.location.href = "/login";
   };
@@ -368,15 +356,6 @@ export default function MetroBoomin() {
                   ))}
                 </Box>
                 {/* ---------------------------------------- CAROUSEL --------------------------------- */}
-                {/* <Box
-                  sx={{
-                    width: "40%",
-                    height: "1rem",
-                    marginTop: "1.6rem",
-                    backgroundColor: "#f59f00",
-                    borderRadius: "2rem",
-                  }}
-                ></Box> */}
                 <Grid
                   item
                   xs={12}
@@ -384,27 +363,29 @@ export default function MetroBoomin() {
                     display: "flex",
                     justifyContent: "space-evenly",
                     marginTop: "1rem",
+                    padding: "0 6rem",
                   }}
                 >
                   <Button
-                    className={classes.arrowButton}
-                    onClick={handlePrevClick}
                     sx={{
-                      backgroundColor: "#fff",
                       border: "2px solid #f59f00",
-                      color: "#f59f00",
-                      borderRadius: "2rem",
+                      backgroundColor: contentIndex === 0 ? "#f59f00" : "#fff",
                     }}
+                    onClick={() => setContentIndex(0)}
                   ></Button>
                   <Button
-                    className={classes.arrowButton}
-                    onClick={handleNextClick}
                     sx={{
-                      backgroundColor: "#fff",
                       border: "2px solid #f59f00",
-                      color: "#f59f00",
-                      borderRadius: "2rem",
+                      backgroundColor: contentIndex === 1 ? "#f59f00" : "#fff",
                     }}
+                    onClick={() => setContentIndex(1)}
+                  ></Button>
+                  <Button
+                    sx={{
+                      border: "2px solid #f59f00",
+                      backgroundColor: contentIndex === 2 ? "#f59f00" : "#fff",
+                    }}
+                    onClick={() => setContentIndex(2)}
                   ></Button>
                 </Grid>
                 <Typography
@@ -422,7 +403,7 @@ export default function MetroBoomin() {
                   style={{
                     height: "8rem",
                     marginTop: "3rem",
-                    marginBottom: "3rem",
+                    marginBottom: "1rem",
                   }}
                 />
               </Grid>
