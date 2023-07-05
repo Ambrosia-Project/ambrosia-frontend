@@ -188,7 +188,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                 required
                 onChange={(event) => setAge(event.target.value)}
               />
-              <label className={classes.label}>Most Allergic Ingredients</label>
+              <label className={classes.label}>Allergic Ingredients</label>
               <Box sx={{ minWidth: 120, marginTop: "5px" }}>
                 <FormControl fullWidth>
                   <Select
@@ -198,7 +198,6 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                     value={ingredientsList}
                     onChange={handleChange}
                   >
-                    {console.log(allergicIngredients.length)}
                     {allergicIngredients !== 0 && (
                       <MenuItem key={"None"} value={"None"}>
                         {"None"}

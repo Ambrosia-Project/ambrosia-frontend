@@ -18,9 +18,9 @@ import {
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { makeStyles } from "@mui/styles";
-import SearchBar from "../components/SearchBar";
 import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
+import allergiesService from "../services/allergies.service";
 
 const exampleAllergies = [
   "Milk",
@@ -67,8 +67,31 @@ export default function AddAllergies() {
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [severity, setSeverity] = useState("info");
+  const [allergicIngredients, setAllergicIngredients] = useState([]); // from database
   const matches = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const smallMatches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
+  const getAllergies = async () => {
+    try {
+      const res = await allergiesService.getAllergies();
+      console.log(res);
+      if (res?.status === 200) {
+        let data = res?.data;
+        setAllergicIngredients(data);
+      } else {
+        setSnackbarMessage(res?.data?.message);
+        setSnackbar(true);
+        setSeverity("error");
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle any error, e.g., show an error snackbar
+    }
+  };
+
+  useEffect(() => {
+    getAllergies();
+  }, []);
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
@@ -153,9 +176,7 @@ export default function AddAllergies() {
               >
                 Full Allergies List
               </Typography>
-              <Grid item xs={12} sx={{ p: 0, my: 2 }}>
-                <SearchBar onSearch={handleSearch} style={{ width: "60%" }} />
-              </Grid>
+
               <Box
                 display="flex"
                 alignItems="center"
@@ -236,7 +257,7 @@ export default function AddAllergies() {
                           value={selectedOption}
                           onChange={handleChange}
                         >
-                          {exampleAllergies.map((option) => (
+                          {allergicIngredients.map((option) => (
                             <MenuItem key={option} value={option}>
                               {option}
                             </MenuItem>

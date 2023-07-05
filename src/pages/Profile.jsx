@@ -14,6 +14,8 @@ import {
   Select,
   TextField,
   Typography,
+  InputLabel,
+  MenuItem,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
@@ -340,21 +342,14 @@ const Profile = () => {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={allergicTo}
+                    multiple
+                    renderValue={(selected) => selected.join(", ")}
                   >
+                    {/* Render menu items */}
                     {allergicTo.map((ingredient) => (
-                      <ListItem
-                        secondaryAction={
-                          <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            onClick={() => handleDeleteAllegrgy(ingredient)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        }
-                      >
+                      <MenuItem key={ingredient} value={ingredient}>
                         {ingredient}
-                      </ListItem>
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
