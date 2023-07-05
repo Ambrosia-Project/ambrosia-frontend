@@ -331,7 +331,7 @@ const Profile = () => {
                 justifyContent: "left",
               }}
             >
-              <Typography variant="h6">Most Allergic To</Typography>
+              <Typography variant="h6">Allergies</Typography>
             </Grid>
             <Grid item xs={8}>
               <Box sx={{ minWidth: 120, marginTop: "5px" }}>
