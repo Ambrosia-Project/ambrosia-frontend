@@ -18,7 +18,7 @@ export default function BlogListItem({ blog }) {
                             {"By " + blog.name}
                         </Typography>
                         <Typography variant="body2" component="p"  sx={{ marginTop: '10px', wordWrap:'break-word'}}>
-                            {blog.content.substring(0, 200) + '...'}
+                            {blog.content.substring(0, 100) + '...'}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} sx={{ width: '100%', textAlign: 'right' }}>

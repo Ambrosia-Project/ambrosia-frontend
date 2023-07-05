@@ -46,7 +46,7 @@ function AllOrders() {
             justifyContent="flex-end"
             paddingRight={2}
           >
-            <HelperIcon text="You can search by clicking the search icon or by pressing enter. Also, you can apply filter(s) by using filter" />
+            <HelperIcon text="You can see the all the orders below. Choose one of the client to proceed to see details." />
           </Box>
           <Grid
             container

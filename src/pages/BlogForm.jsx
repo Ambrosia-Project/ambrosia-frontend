@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     padding: theme.spacing(1),
-    width: "15%",
     alignSelf: "flex-end",
   },
 }));
@@ -100,13 +99,16 @@ export default function CreateBlogPage() {
     setLoading(true);
     if (title === "" || content === "" || image === "") {
       setError(true);
+      setLoading(false);
       return;
     }
 
     setError(false);
 
+    const user = JSON.parse(localStorage.getItem("user"));
+
     const data = {
-      email: localStorage.getItem("email"),
+      email: user.email,
       title: title,
       content: content,
       image: image,
@@ -128,7 +130,6 @@ export default function CreateBlogPage() {
       setSnackbarMessage(error?.message);
       setSnackbar(true);
       setSeverity("error");
-      console.error(error);
       // Handle error
     }
     setLoading(false);
@@ -229,15 +230,16 @@ export default function CreateBlogPage() {
         </FormControl>
       </Grid>
       <Grid item xs={12} sx={{ width: "100%", textAlign: "right" }}>
-        <Button
-          type="submit"
-          variant="contained"
-          color="success"
-          endIcon={<SendIcon />}
-          className={classes.btn}
-        >
-          Send
-        </Button>
+        {loading ? <CircularProgress /> : <Button
+            type="submit"
+            variant="contained"
+            color="success"
+            endIcon={<SendIcon />}
+            className={classes.btn}
+          >
+            Send
+          </Button>
+        }
       </Grid>
     </form>
   );
