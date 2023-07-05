@@ -34,6 +34,7 @@ const SpecificMenuListPage = lazy(() =>
   import("../pages/Specific Menu/SpecificMenuPage")
 );
 const MenuDetails = lazy(() => import("../pages/Specific Menu/MenuDetails"));
+const MetroBoomin = lazy(() => import("../pages/MetroBoomin"));
 const OrderPage = lazy(() => import("../pages/Order/OrderPage"));
 const AllOrders = lazy(() => import("../pages/Order/AllOrders"));
 
@@ -44,6 +45,11 @@ const auth = [
     path: "/login",
     component: Login,
     exact: false,
+  },
+  {
+    path: "/landing",
+    component: MetroBoomin,
+    exact: true,
   },
   {
     path: "/signup",
@@ -68,6 +74,11 @@ const auth = [
   {
     path: "/updatePassword",
     component: NewPasswordPage,
+    exact: true,
+  },
+  {
+    path: "/metroboomin",
+    component: MetroBoomin,
     exact: true,
   },
 ];
