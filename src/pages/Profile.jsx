@@ -16,6 +16,8 @@ import {
   Typography,
   InputLabel,
   MenuItem,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
@@ -23,6 +25,14 @@ import caesar from "../assets/images/caesar.png";
 
 import { makeStyles } from "@mui/styles";
 import authService from "../services/auth.service";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#5E714E",
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   profilePictureContainer: {
@@ -188,208 +198,210 @@ const Profile = () => {
     setAllergicTo(allergicTo.filter((item) => item !== allergy));
   };
   return (
-    <CssBaseline>
-      <Container maxWidth="md">
-        <Paper elevation={3} className={classes.paperContainer}>
-          <Avatar
-            className={classes.profilePicture}
-            src={image}
-            sx={{
-              margin: "5% auto",
-            }}
-          />
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
+        <Container maxWidth="md">
+          <Paper elevation={3} className={classes.paperContainer}>
+            <Avatar
+              className={classes.profilePicture}
+              src={image}
+              sx={{
+                margin: "5% auto",
+              }}
+            />
 
-          <input
-            type="file"
-            ref={inputFileRef}
-            style={{ display: "none" }}
-            onChange={handlePhotoUpload}
-            accept="image/*"
-          />
-          <IconButton
-            sx={{
-              position: "relative",
-              bottom: "70px",
-              left: "55%",
-              background: "#5E714E",
-              "&:hover": { background: "#4E613E" },
-            }}
-            onClick={handlePhotoChange}
-          >
-            <AddAPhotoIcon sx={{ color: "#fff" }} />
-          </IconButton>
-          <Grid container sx={{ padding: "3% 7%" }}>
-            <Grid
-              item
-              xs={3}
+            <input
+              type="file"
+              ref={inputFileRef}
+              style={{ display: "none" }}
+              onChange={handlePhotoUpload}
+              accept="image/*"
+            />
+            <IconButton
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
+                position: "relative",
+                bottom: "70px",
+                left: "55%",
+                background: "#5E714E",
+                "&:hover": { background: "#4E613E" },
               }}
+              onClick={handlePhotoChange}
             >
-              <Typography variant="h6">Email</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <TextField
-                variant="outlined"
+              <AddAPhotoIcon sx={{ color: "#fff" }} />
+            </IconButton>
+            <Grid container sx={{ padding: "3% 7%" }}>
+              <Grid
+                item
+                xs={3}
                 sx={{
-                  "& .MuiFilledInput-underline: before": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiFilledInput-underline: after": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
-                  "& .MuiInputBase-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "left",
                 }}
-                margin="dense"
-                type="email"
-                fullWidth
-                disabled
-                value={email}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={3}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
-              }}
-            >
-              <Typography variant="h6">Name</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <TextField
-                variant="outlined"
+              >
+                <Typography variant="h6">Email</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <TextField
+                  variant="outlined"
+                  sx={{
+                    "& .MuiFilledInput-underline: before": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiFilledInput-underline: after": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                  }}
+                  margin="dense"
+                  type="email"
+                  fullWidth
+                  disabled
+                  value={email}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={3}
                 sx={{
-                  "& .MuiFilledInput-underline: before": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiFilledInput-underline: after": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
-                  "& .MuiInputBase-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "left",
                 }}
-                margin="dense"
-                type="text"
-                value={username}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid
-              item
-              xs={3}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
-              }}
-            >
-              <Typography variant="h6">Age</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <TextField
-                variant="outlined"
+              >
+                <Typography variant="h6">Name</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <TextField
+                  variant="outlined"
+                  sx={{
+                    "& .MuiFilledInput-underline: before": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiFilledInput-underline: after": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                  }}
+                  margin="dense"
+                  type="text"
+                  value={username}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid
+                item
+                xs={3}
                 sx={{
-                  "& .MuiFilledInput-underline: before": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiFilledInput-underline: after": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
-                  "& .MuiInputBase-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "left",
                 }}
-                margin="dense"
-                type="number"
-                fullWidth
-                required
-                value={age}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={3}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
-              }}
-            >
-              <Typography variant="h6">Allergy</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Box sx={{ minWidth: 120, marginTop: "5px" }}>
-                <FormControl fullWidth>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={allergicTo}
-                    multiple
-                    renderValue={(selected) => selected.join(", ")}
-                  >
-                    {/* Render menu items */}
-                    {allergicTo.map((ingredient) => (
-                      <MenuItem key={ingredient} value={ingredient}>
-                        {ingredient}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+              >
+                <Typography variant="h6">Age</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <TextField
+                  variant="outlined"
+                  sx={{
+                    "& .MuiFilledInput-underline: before": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiFilledInput-underline: after": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                  }}
+                  margin="dense"
+                  type="number"
+                  fullWidth
+                  required
+                  value={age}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={3}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "left",
+                }}
+              >
+                <Typography variant="h6">Allergy</Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Box sx={{ minWidth: 120, marginTop: "5px" }}>
+                  <FormControl fullWidth>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={allergicTo}
+                      multiple
+                      renderValue={(selected) => selected.join(", ")}
+                    >
+                      {/* Render menu items */}
+                      {allergicTo.map((ingredient) => (
+                        <MenuItem key={ingredient} value={ingredient}>
+                          {ingredient}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+              <Grid item xs={1}>
+                <IconButton
+                  aria-label="add"
+                  onClick={() => {
+                    window.location.href = "/addAllergies";
+                  }}
+                >
+                  <AddCircleOutlineIcon
+                    sx={{ fontSize: "2.5rem", textAlign: "center" }}
+                  />
+                </IconButton>
+              </Grid>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  className={classes.saveButton}
+                  onClick={handleSaveChanges}
+                  sx={{ textTransform: "none" }}
+                >
+                  Save Changes
+                </Button>
               </Box>
             </Grid>
-            <Grid item xs={1}>
-              <IconButton
-                aria-label="add"
-                onClick={() => {
-                  window.location.href = "/addAllergies";
-                }}
-              >
-                <AddCircleOutlineIcon
-                  sx={{ fontSize: "2.5rem", textAlign: "center" }}
-                />
-              </IconButton>
-            </Grid>
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "100%",
-              }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                className={classes.saveButton}
-                onClick={handleSaveChanges}
-                sx={{ textTransform: "none" }}
-              >
-                Save Changes
-              </Button>
-            </Box>
-          </Grid>
-        </Paper>
-      </Container>
-    </CssBaseline>
+          </Paper>
+        </Container>
+      </CssBaseline>
+    </ThemeProvider>
   );
 };
 

@@ -24,6 +24,11 @@ const theme = createTheme({
   typography: {
     fontFamily: "Poppins, sans-serif",
   },
+  palette: {
+    primary: {
+      main: "#5E714E",
+    },
+  },
 });
 
 export default function LoginPage({ update, setUpdate }) {

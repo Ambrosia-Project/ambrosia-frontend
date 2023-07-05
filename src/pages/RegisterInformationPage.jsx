@@ -10,6 +10,8 @@ import {
   Paper,
   Select,
   TextField,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { makeStyles } from "@mui/styles";
@@ -19,6 +21,14 @@ import logo from "../assets/images/logo512.png";
 import CustomSnackbar from "../components/Snackbar";
 import authService from "../services/auth.service";
 import allergiesService from "../services/allergies.service";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#5E714E",
+    },
+  },
+});
 
 const allergies = ["Milk", "Eggs", "Fish", "Crustacean shellfish", "Tree nuts"];
 
@@ -120,138 +130,142 @@ export default function RegisterInformationPage({ update, setUpdate }) {
   };
 
   return (
-    <CssBaseline>
-      <Container fluid>
-        <Grid align="center">
-          <CustomSnackbar
-            snackbar={snackbar}
-            setSnackbar={setSnackbar}
-            snackbarMessage={snackbarMessage}
-            severity={severity}
-          />
-          <Paper
-            elevation={3}
-            className={matches ? classes.paperStyle : classes.paperStyleMobile}
-          >
-            <Grid align="center">
-              <img
-                alt="ambrosia logo"
-                src={logo}
-                style={{ width: "45%", height: "45%" }}
-              />
-            </Grid>
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
+        <Container fluid>
+          <Grid align="center">
+            <CustomSnackbar
+              snackbar={snackbar}
+              setSnackbar={setSnackbar}
+              snackbarMessage={snackbarMessage}
+              severity={severity}
+            />
+            <Paper
+              elevation={3}
+              className={
+                matches ? classes.paperStyle : classes.paperStyleMobile
+              }
+            >
+              <Grid align="center">
+                <img
+                  alt="ambrosia logo"
+                  src={logo}
+                  style={{ width: "45%", height: "45%" }}
+                />
+              </Grid>
 
-            <Grid className={classes.inputGrid}>
-              <label className={classes.label}>Name</label>
-              <TextField
-                variant="outlined"
-                sx={{
-                  "& .MuiFilledInput-underline: before": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiFilledInput-underline: after": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
-                  "& .MuiInputBase-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
-                }}
-                margin="dense"
-                type="text"
-                fullWidth
-                required
-                onChange={(event) => setName(event.target.value)}
-              />
-              <label className={classes.label}>Age</label>
-              <TextField
-                variant="outlined"
-                sx={{
-                  "& .MuiFilledInput-underline: before": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiFilledInput-underline: after": {
-                    borderBottomColor: "#5e714e",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
-                  "& .MuiInputBase-root.Mui-focused": {
-                    color: "#5e714e",
-                  },
-                }}
-                margin="dense"
-                type="number"
-                fullWidth
-                required
-                onChange={(event) => setAge(event.target.value)}
-              />
-              <label className={classes.label}>Allergic Ingredients</label>
-              <Box sx={{ minWidth: 120, marginTop: "5px" }}>
-                <FormControl fullWidth>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    multiple
-                    value={ingredientsList}
-                    onChange={handleChange}
-                  >
-                    {allergicIngredients !== 0 && (
-                      <MenuItem key={"None"} value={"None"}>
-                        {"None"}
-                      </MenuItem>
-                    )}
-                    {allergicIngredients.map((ingredient) => (
-                      <MenuItem key={ingredient} value={ingredient}>
-                        {ingredient}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-            </Grid>
-            <div className={classes.buttonContainer}>
-              {loading ? (
-                <CircularProgress style={{ color: "#999" }} />
-              ) : (
-                <Button
-                  variant="contained"
-                  type="submit"
+              <Grid className={classes.inputGrid}>
+                <label className={classes.label}>Name</label>
+                <TextField
+                  variant="outlined"
                   sx={{
-                    backgroundColor: "#5e714e",
-                    "&: hover": {
-                      backgroundColor: "#6e815e",
+                    "& .MuiFilledInput-underline: before": {
+                      borderBottomColor: "#5e714e",
                     },
-                    "&:active": {
-                      backgroundColor: "#5e714e",
+                    "& .MuiFilledInput-underline: after": {
+                      borderBottomColor: "#5e714e",
                     },
-                    fontSize: "15px",
-                    marginTop: 5,
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
                   }}
+                  margin="dense"
+                  type="text"
                   fullWidth
-                  onClick={(e) => {
-                    if (name === "") {
-                      setSnackbarMessage("Please enter your name");
-                      setSnackbar(true);
-                    } else if (age === "" || isNaN(parseInt(age))) {
-                      setSnackbarMessage("Please enter your age");
-                      setSnackbar(true);
-                    } else {
-                      handleRegister(e);
-                    }
+                  required
+                  onChange={(event) => setName(event.target.value)}
+                />
+                <label className={classes.label}>Age</label>
+                <TextField
+                  variant="outlined"
+                  sx={{
+                    "& .MuiFilledInput-underline: before": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiFilledInput-underline: after": {
+                      borderBottomColor: "#5e714e",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
+                    "& .MuiInputBase-root.Mui-focused": {
+                      color: "#5e714e",
+                    },
                   }}
-                  onKeyDown={handleKeyPress}
-                >
-                  I'm Hungry!
-                </Button>
-              )}
-            </div>
-          </Paper>
-        </Grid>
-      </Container>
-    </CssBaseline>
+                  margin="dense"
+                  type="number"
+                  fullWidth
+                  required
+                  onChange={(event) => setAge(event.target.value)}
+                />
+                <label className={classes.label}>Allergic Ingredients</label>
+                <Box sx={{ minWidth: 120, marginTop: "5px" }}>
+                  <FormControl fullWidth>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      multiple
+                      value={ingredientsList}
+                      onChange={handleChange}
+                    >
+                      {allergicIngredients !== 0 && (
+                        <MenuItem key={"None"} value={"None"}>
+                          {"None"}
+                        </MenuItem>
+                      )}
+                      {allergicIngredients.map((ingredient) => (
+                        <MenuItem key={ingredient} value={ingredient}>
+                          {ingredient}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+              <div className={classes.buttonContainer}>
+                {loading ? (
+                  <CircularProgress style={{ color: "#999" }} />
+                ) : (
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    sx={{
+                      backgroundColor: "#5e714e",
+                      "&: hover": {
+                        backgroundColor: "#6e815e",
+                      },
+                      "&:active": {
+                        backgroundColor: "#5e714e",
+                      },
+                      fontSize: "15px",
+                      marginTop: 5,
+                    }}
+                    fullWidth
+                    onClick={(e) => {
+                      if (name === "") {
+                        setSnackbarMessage("Please enter your name");
+                        setSnackbar(true);
+                      } else if (age === "" || isNaN(parseInt(age))) {
+                        setSnackbarMessage("Please enter your age");
+                        setSnackbar(true);
+                      } else {
+                        handleRegister(e);
+                      }
+                    }}
+                    onKeyDown={handleKeyPress}
+                  >
+                    I'm Hungry!
+                  </Button>
+                )}
+              </div>
+            </Paper>
+          </Grid>
+        </Container>
+      </CssBaseline>
+    </ThemeProvider>
   );
 }
 
