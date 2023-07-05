@@ -24,15 +24,6 @@ const theme = createTheme({
   }
 });
 
-const allergicIngredients = [
-  "Milk",
-  "Egg",
-  "Fish",
-  "Crustacean shellfish",
-  "Tree nuts",
-  "Peanuts",
-]
-
 export default function RegisterInformationPage({ update, setUpdate }) {
 
   const classes = useStyles();
@@ -45,7 +36,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
 
   const history = useHistory();
 
-  const handleLogin = async (e) => {
+  const handleForgetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -74,6 +65,12 @@ export default function RegisterInformationPage({ update, setUpdate }) {
       setLoading(false);
     }
   };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+        handleForgetPassword(e);
+    }
+};
 
   return (
     <ThemeProvider theme={theme}>
@@ -150,9 +147,10 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                         setSnackbarMessage("Please enter your email");
                         setSnackbar(true);
                       } else {
-                        handleLogin(e);
+                        handleForgetPassword(e);
                       }
                     }}
+                    onKeyDown={handleKeyPress}
                   >
                     Continue
                   </Button>

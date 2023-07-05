@@ -28,7 +28,6 @@ const Profile = lazy(() => import("../pages/Profile"));
 const BlogPage = lazy(() => import("../pages/BlogPage"));
 const BlogDetailsPage = lazy(() => import("../pages/BlogDetailsPage"));
 const CreateBlogPage = lazy(() => import("../pages/CreateBlogPage"));
-const AddPreferences = lazy(() => import("../pages/AddPreferences"));
 const AddAllergies = lazy(() => import("../pages/AddAllergies"));
 const MenuListPage = lazy(() => import("../pages/Menu List/MenuListPage"));
 const SpecificMenuListPage = lazy(() =>
@@ -36,6 +35,8 @@ const SpecificMenuListPage = lazy(() =>
 );
 const MenuDetails = lazy(() => import("../pages/Specific Menu/MenuDetails"));
 const MetroBoomin = lazy(() => import("../pages/MetroBoomin"));
+const OrderPage = lazy(() => import("../pages/Order/OrderPage"));
+const AllOrders = lazy(() => import("../pages/Order/AllOrders"));
 
 const NotFound = lazy(() => import("../components/NotFound"));
 
@@ -108,13 +109,9 @@ const privateRoutes = [
     component: BlogDetailsPage,
     exact: true,
   },
+
   {
-    path: "/addpreferences",
-    component: AddPreferences,
-    exact: true,
-  },
-  {
-    path: "/addallergies",
+    path: "/addAllergies",
     component: AddAllergies,
     exact: true,
   },
@@ -131,6 +128,14 @@ const privateRoutes = [
     path: "/menuDetails/:id",
     component: MenuDetails,
   },
+  {
+    path: "/orders/:email&:role",
+    component: OrderPage,
+  },
+  {
+    path: "/allOrders",
+    component: AllOrders,
+  },
 ];
 
 function PrivateRoute({ children, ...rest }) {
@@ -138,14 +143,13 @@ function PrivateRoute({ children, ...rest }) {
   return (
     <Route
       {...rest}
-      render={({ location }) =>
+      render={() =>
         isLoggedIn ? (
           children
         ) : (
           <Redirect
             to={{
               pathname: "/login",
-              state: { from: location },
             }}
           />
         )

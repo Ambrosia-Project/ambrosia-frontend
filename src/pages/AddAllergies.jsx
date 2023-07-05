@@ -12,19 +12,15 @@ import {
   MenuItem,
   IconButton,
   Box,
-  Snackbar,
   Alert,
+  useMediaQuery,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import { makeStyles } from "@mui/styles";
-
-// import SearchBar from "../components/SearchBar";
-
-// import Filter from "./Filter";
-
+import SearchBar from "../components/SearchBar";
 import logo from "../assets/images/logo512.png";
+import CustomSnackbar from "../components/Snackbar";
 
 const exampleAllergies = [
   "Milk",
@@ -68,6 +64,11 @@ export default function AddAllergies() {
   const [allergies, setAllergies] = useState([]);
   const classes = useStyles(); // Apply custom styles
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [severity, setSeverity] = useState("info");
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const smallMatches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
@@ -93,12 +94,14 @@ export default function AddAllergies() {
       const user = JSON.parse(storedUser);
       user.allergies = allergies;
       localStorage.setItem("user", JSON.stringify(user));
-      setSnackbarOpen(true); // Showing the snackbar
+      setSnackbar(true);
+      setSnackbarMessage("Changes saved successfully!");
+      setSeverity("success");
     }
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
+  const handleSearch = (text) => {
+    console.log(text);
   };
 
   useEffect(() => {
@@ -116,12 +119,23 @@ export default function AddAllergies() {
 
   return (
     <CssBaseline>
-      <Container maxWidth="xs">
+      <Container maxWidth="lg">
+        <CustomSnackbar
+          snackbar={snackbar}
+          setSnackbar={setSnackbar}
+          snackbarMessage={snackbarMessage}
+          severity={severity}
+          autoHideDuration={3000}
+        />
         <Grid container>
           <Grid item xs={12}>
             <Paper
               elevation={3}
               style={{ padding: "1rem", textAlign: "center" }}
+              sx={{
+                my: { xs: 3, md: 6 },
+                p: { xs: 2, md: 3 },
+              }}
             >
               <img
                 src={logo}
@@ -139,88 +153,120 @@ export default function AddAllergies() {
               >
                 Full Allergies List
               </Typography>
-              <div maxWidth="xs" sx={{ marginBottom: "48px" }}>
-                {allergies.map((allergie, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      border: "1px solid #adb5bd",
-                      padding: "10px",
-                      margin: "5px 24px",
-                    }}
-                  >
-                    <Typography variant="body1" sx={{ textAlign: "left" }}>
-                      {allergie}
-                    </Typography>
-                    <IconButton
-                      onClick={() => handleDeleteAllergy(index)}
-                      sx={{ marginLeft: "auto" }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                ))}
-              </div>
-              <Typography
-                variant="h8"
-                sx={{
-                  color: "#5e714e",
-                  fontWeight: "bold",
-                  textAlign: "left",
-                  margin: "24px",
-                  display: "block",
-                }}
-              >
-                Add Allergy:
-              </Typography>
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ margin: "0 24px" }}
-              >
-                <Grid item xs={6}>
-                  <FormControl>
-                    <InputLabel
-                      id="example-dropdown-label"
-                      sx={{ backgroundColor: "#fff" }}
-                    >
-                      Choose from the menu
-                    </InputLabel>
-                    <Select
-                      labelId="example-dropdown-label"
-                      id="example-dropdown"
-                      value={selectedOption}
-                      onChange={handleChange}
-                      sx={{ width: "180px" }}
-                    >
-                      {exampleAllergies.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={6}>
-                  <Button
-                    className={classes.addButton} // Apply custom styles
-                    sx={{
-                      width: "80px",
-                      height: "56px",
-                      backgroundColor: "#5e714e",
-                      color: "#fff",
-                      textTransform: "none",
-                    }}
-                    onClick={handleAddAllergie}
-                  >
-                    Add
-                  </Button>
-                </Grid>
+              <Grid item xs={12} sx={{ p: 0, my: 2 }}>
+                <SearchBar onSearch={handleSearch} style={{ width: "60%" }} />
               </Grid>
+              <Box
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+                paddingRight={2}
+              >
+                <div
+                  sx={{ marginBottom: "48px" }}
+                  style={
+                    smallMatches
+                      ? { width: "100%" }
+                      : matches
+                      ? { width: "80%" }
+                      : { width: "60%" }
+                  }
+                >
+                  {allergies.map((allergie, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        border: "1px solid #adb5bd",
+                        padding: "10px",
+                        margin: "5px 24px",
+                      }}
+                    >
+                      <Typography variant="body1" sx={{ textAlign: "left" }}>
+                        {allergie}
+                      </Typography>
+                      <IconButton
+                        onClick={() => handleDeleteAllergy(index)}
+                        sx={{ marginLeft: "auto" }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  ))}
+                </div>
+                <div
+                  style={
+                    smallMatches
+                      ? { width: "100%" }
+                      : matches
+                      ? { width: "80%" }
+                      : { width: "60%" }
+                  }
+                >
+                  <Typography
+                    variant="h8"
+                    sx={{
+                      color: "#5e714e",
+                      fontWeight: "bold",
+                      textAlign: "left",
+                      margin: "24px",
+                      display: "block",
+                    }}
+                  >
+                    Add Allergy:
+                  </Typography>
+                  <Grid
+                    container
+                    direction="row"
+                    alignItems="center"
+                    sx={{ margin: "0 24px" }}
+                  >
+                    <Grid item xs={3}>
+                      <FormControl sx={{ width: { xs: "10rem", md: "15rem" } }}>
+                        <InputLabel
+                          id="example-dropdown-label"
+                          sx={{ backgroundColor: "#fff" }}
+                        >
+                          Choose from the menu
+                        </InputLabel>
+                        <Select
+                          labelId="example-dropdown-label"
+                          id="example-dropdown"
+                          value={selectedOption}
+                          onChange={handleChange}
+                        >
+                          {exampleAllergies.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      sx={{ marginLeft: { xs: "6rem", md: "3rem" } }}
+                    >
+                      <Button
+                        className={classes.addButton} // Apply custom styles
+                        sx={{
+                          height: "3.4rem",
+                          width: "auto",
+                          backgroundColor: "#5e714e",
+                          color: "#fff",
+                          textTransform: "none",
+                        }}
+                        onClick={handleAddAllergie}
+                      >
+                        Add
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </div>
+              </Box>
+
               <Button
                 className={classes.saveButton} // Apply custom styles
                 sx={{
@@ -238,19 +284,6 @@ export default function AddAllergies() {
             </Paper>
           </Grid>
         </Grid>
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000} // Adjust the duration as desired
-          onClose={handleSnackbarClose}
-        >
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            Changes saved successfully!
-          </Alert>
-        </Snackbar>
       </Container>
     </CssBaseline>
   );

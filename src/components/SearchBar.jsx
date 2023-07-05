@@ -7,7 +7,6 @@ const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (text = searchText) => {
-    console.log(text);
     onSearch(text);
   };
 

@@ -3,7 +3,6 @@ import { Button, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
 
 export default function BlogListItem({ blog }) {
-    console.log(blog);
     return (
         <Paper elevation={3} sx={{ margin: '3%', padding: '5%' }}>
             <Grid container spacing={3}>
@@ -19,7 +18,7 @@ export default function BlogListItem({ blog }) {
                             {"By " + blog.name}
                         </Typography>
                         <Typography variant="body2" component="p"  sx={{ marginTop: '10px', wordWrap:'break-word'}}>
-                            {blog.content.substring(0, 200) + '...'}
+                            {blog.content.substring(0, 100) + '...'}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} sx={{ width: '100%', textAlign: 'right' }}>

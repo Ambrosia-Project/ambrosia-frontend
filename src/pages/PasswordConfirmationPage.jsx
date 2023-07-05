@@ -40,7 +40,7 @@ export default function RegisterInformationPage({ update, setUpdate }) {
         };
     }, []);
 
-    const handleLogin = async (e) => {
+    const handlePasswordConfirm = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -72,6 +72,12 @@ export default function RegisterInformationPage({ update, setUpdate }) {
             // Handle any error, e.g., show an error snackbar
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handlePasswordConfirm(e);
         }
     };
 
@@ -149,9 +155,10 @@ export default function RegisterInformationPage({ update, setUpdate }) {
                                                 setSnackbarMessage("Please enter your confirmation code");
                                                 setSnackbar(true);
                                             } else {
-                                                handleLogin(e);
+                                                handlePasswordConfirm(e);
                                             }
                                         }}
+                                        onKeyDown={handleKeyPress}
                                     >
                                         Continue
                                     </Button>

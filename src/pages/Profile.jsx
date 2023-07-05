@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from "react";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Avatar,
-  Typography,
-  Container,
-  Grid,
-  Paper,
-  CssBaseline,
-  IconButton,
-  Button,
   Box,
-  TextField,
-  useMediaQuery,
-  Snackbar,
-  Alert,
-  Select,
-  MenuItem,
+  Button,
+  Container,
+  CssBaseline,
   FormControl,
-  InputLabel,
+  Grid,
+  IconButton,
+  ListItem,
+  Paper,
+  Select,
+  TextField,
+  Typography,
 } from "@mui/material";
-
-import EditIcon from "@mui/icons-material/Edit";
+import React, { useEffect, useRef, useState } from "react";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import caesar from "../assets/images/caesar.png";
 
 import { makeStyles } from "@mui/styles";
+import authService from "../services/auth.service";
 
 const useStyles = makeStyles((theme) => ({
   profilePictureContainer: {
@@ -44,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   paperContainer: {
-    padding: theme.spacing(6),
+    marginTop: theme.spacing(2),
+    padding: "3% 7%",
   },
   sectionContainer: {
     display: "flex",
@@ -71,17 +71,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.875rem",
   },
   sectionValue: {
-    flexBasis: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
     padding: theme.spacing(1),
     borderRadius: theme.spacing(1),
     border: `2px solid #5e714e`,
-    [theme.breakpoints.up("sm")]: {
-      flexBasis: "70%",
-      justifyContent: "space-between",
-    },
   },
   editIcon: {
     fontSize: 8,
@@ -107,24 +100,13 @@ const useStyles = makeStyles((theme) => ({
 const Profile = () => {
   const classes = useStyles();
 
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const isMediumScreen = useMediaQuery((theme) =>
-    theme.breakpoints.between("sm", "md")
-  );
-  const isLargeScreen = useMediaQuery((theme) => theme.breakpoints.up("lg"));
-
+  const [image, setImage] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [age, setAge] = useState("");
-  const [allergicTo, setAllergicTo] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [selectedAllergen, setSelectedAllergen] = useState("");
+  const [allergicTo, setAllergicTo] = useState([]);
 
-  const [editing, setEditing] = useState({
-    username: false,
-    age: false,
-    allergicTo: false,
-  });
+  const inputFileRef = useRef(null);
 
   useEffect(() => {
     fetchData();
@@ -136,165 +118,281 @@ const Profile = () => {
       const user = JSON.parse(storedUser);
       setEmail(user.email);
       setUsername(user.name);
-      setAge(user.age.toString());
-      setAllergicTo(user.allergies.join(", "));
+      setAge(user.age);
+      setAllergicTo(user.allergies);
+      setImage(user.image);
     }
   };
 
-  const handleEdit = (section) => {
-    setEditing((prevState) => ({
-      ...prevState,
-      [section]: true,
-    }));
-  };
+  React.useEffect(() => {
+    fetchData();
+  }, []);
 
-  const handleAllergenChange = (event) => {
-    setSelectedAllergen(event.target.value);
-  };
-
-  const handleInputChange = (event, section) => {
-    const value = event.target.value;
-
-    switch (section) {
-      case "username":
-        setUsername(value);
-        break;
-      case "age":
-        setAge(value);
-        break;
-      case "allergicTo":
-        setAllergicTo(value);
-        break;
-      default:
-        break;
-    }
+  const handleAddAllergy = () => {
+    window.location.href = "/profile/addAllergy";
   };
 
   const handleSaveChanges = () => {
-    const updatedUserInfo = {
+    const user = {
+      image: image,
       email: email,
-      age: parseInt(age),
       name: username,
-      allergies: allergicTo.split(",").map((item) => item.trim()),
+      age: age,
+      allergies: allergicTo,
+      role: JSON.parse(localStorage.getItem("user")).role,
     };
-
-    localStorage.setItem("user", JSON.stringify(updatedUserInfo));
-
-    setEditing({
-      username: false,
-      age: false,
-      allergicTo: false,
+    console.log(user.image);
+    authService.updateProfile(user).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        localStorage.setItem("user", JSON.stringify(user));
+        window.location.href = "/profile";
+      }
     });
-    setSnackbarOpen(true);
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
 
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files[0];
+    convertToBase64(file)
+      .then((res) => {
+        console.log(res);
+        setImage(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const handlePhotoChange = () => {
+    inputFileRef.current.click();
+  };
+
+  const handleDeleteAllegrgy = (allergy) => {
+    setAllergicTo(allergicTo.filter((item) => item !== allergy));
+  };
   return (
     <CssBaseline>
-      <Container maxWidth={isSmallScreen ? "xs" : isMediumScreen ? "sm" : "md"}>
-        <Grid container spacing={isSmallScreen ? 2 : 4}>
-          <Grid item xs={12} md={isSmallScreen ? 6 : 12}>
-            <Paper elevation={3} className={classes.paperContainer}>
-              <div className={classes.profilePictureContainer}>
-                <Avatar
-                  className={classes.profilePicture}
-                  src="/path/to/avatar.jpg"
-                />
-              </div>
-              <Grid item xs={12} className={classes.sectionContainer}>
-                <Typography variant="h6" className={classes.sectionLabel}>
-                  Email
-                </Typography>
-                <div className={classes.sectionValue}>
-                  <Typography variant="body1">{email}</Typography>
-                </div>
-              </Grid>
-              <Grid item xs={12} className={classes.sectionContainer}>
-                <Typography variant="h6" className={classes.sectionLabel}>
-                  Username
-                </Typography>
-                {editing.username ? (
-                  <TextField
-                    value={username}
-                    onChange={(event) => handleInputChange(event, "username")}
-                  />
-                ) : (
-                  <div className={classes.sectionValue}>
-                    <Typography variant="body1">{username}</Typography>
-                    <IconButton onClick={() => handleEdit("username")}>
-                      <EditIcon />
-                    </IconButton>
-                  </div>
-                )}
-              </Grid>
-              <Grid item xs={12} className={classes.sectionContainer}>
-                <Typography variant="h6" className={classes.sectionLabel}>
-                  Age
-                </Typography>
-                {editing.age ? (
-                  <TextField
-                    value={age}
-                    onChange={(event) => handleInputChange(event, "age")}
-                  />
-                ) : (
-                  <div className={classes.sectionValue}>
-                    <Typography variant="body1">{age}</Typography>
-                    <IconButton onClick={() => handleEdit("age")}>
-                      <EditIcon />
-                    </IconButton>
-                  </div>
-                )}
-              </Grid>
-              <Grid item xs={12} className={classes.sectionContainer}>
-                <Typography variant="h6" className={classes.sectionLabel}>
-                  Most Allergic To
-                </Typography>
-                <FormControl>
-                  <InputLabel id="allergen-label">Allergens</InputLabel>
+      <Container maxWidth="md">
+        <Paper elevation={3} className={classes.paperContainer}>
+          <Avatar
+            className={classes.profilePicture}
+            src={image}
+            sx={{
+              margin: "5% auto",
+            }}
+          />
+
+          <input
+            type="file"
+            ref={inputFileRef}
+            style={{ display: "none" }}
+            onChange={handlePhotoUpload}
+            accept="image/*"
+          />
+          <IconButton
+            sx={{
+              position: "relative",
+              bottom: "70px",
+              left: "55%",
+              background: "#5E714E",
+              "&:hover": { background: "#4E613E" },
+            }}
+            onClick={handlePhotoChange}
+          >
+            <AddAPhotoIcon sx={{ color: "#fff" }} />
+          </IconButton>
+          <Grid container sx={{ padding: "3% 7%" }}>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Email</Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <TextField
+                variant="outlined"
+                sx={{
+                  "& .MuiFilledInput-underline: before": {
+                    borderBottomColor: "#5e714e",
+                  },
+                  "& .MuiFilledInput-underline: after": {
+                    borderBottomColor: "#5e714e",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#5e714e",
+                  },
+                  "& .MuiInputBase-root.Mui-focused": {
+                    color: "#5e714e",
+                  },
+                }}
+                margin="dense"
+                type="email"
+                fullWidth
+                disabled
+                value={email}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Name</Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <TextField
+                variant="outlined"
+                sx={{
+                  "& .MuiFilledInput-underline: before": {
+                    borderBottomColor: "#5e714e",
+                  },
+                  "& .MuiFilledInput-underline: after": {
+                    borderBottomColor: "#5e714e",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#5e714e",
+                  },
+                  "& .MuiInputBase-root.Mui-focused": {
+                    color: "#5e714e",
+                  },
+                }}
+                margin="dense"
+                type="text"
+                value={username}
+                fullWidth
+                required
+              />
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Age</Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <TextField
+                variant="outlined"
+                sx={{
+                  "& .MuiFilledInput-underline: before": {
+                    borderBottomColor: "#5e714e",
+                  },
+                  "& .MuiFilledInput-underline: after": {
+                    borderBottomColor: "#5e714e",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#5e714e",
+                  },
+                  "& .MuiInputBase-root.Mui-focused": {
+                    color: "#5e714e",
+                  },
+                }}
+                margin="dense"
+                type="number"
+                fullWidth
+                required
+                value={age}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <Typography variant="h6">Allergies</Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Box sx={{ minWidth: 120, marginTop: "5px" }}>
+                <FormControl fullWidth>
                   <Select
-                    labelId="allergen-label"
-                    id="allergen-select"
-                    value={selectedAllergen}
-                    onChange={handleAllergenChange}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={allergicTo}
                   >
-                    {allergicTo.split(", ").map((allergen) => (
-                      <MenuItem key={allergen} value={allergen}>
-                        {allergen}
-                      </MenuItem>
+                    {allergicTo.map((ingredient) => (
+                      <ListItem
+                        secondaryAction={
+                          <IconButton
+                            edge="end"
+                            aria-label="delete"
+                            onClick={() => handleDeleteAllegrgy(ingredient)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        }
+                      >
+                        {ingredient}
+                      </ListItem>
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
-              <Box className={classes.saveButtonContainer}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.saveButton}
-                  onClick={handleSaveChanges}
-                  sx={{ textTransform: "none" }}
-                >
-                  Save Changes
-                </Button>
               </Box>
-              <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={3000}
-                onClose={handleSnackbarClose}
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton
+                aria-label="add"
+                onClick={() => {
+                  window.location.href = "/addAllergies";
+                }}
               >
-                <Alert
-                  onClose={handleSnackbarClose}
-                  severity="success"
-                  sx={{ width: "100%" }}
-                >
-                  Changes saved successfully!
-                </Alert>
-              </Snackbar>
-            </Paper>
+                <AddCircleOutlineIcon
+                  sx={{ fontSize: "2.5rem", textAlign: "center" }}
+                />
+              </IconButton>
+            </Grid>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                width: "100%",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.saveButton}
+                onClick={handleSaveChanges}
+                sx={{ textTransform: "none" }}
+              >
+                Save Changes
+              </Button>
+            </Box>
           </Grid>
-        </Grid>
+        </Paper>
       </Container>
     </CssBaseline>
   );

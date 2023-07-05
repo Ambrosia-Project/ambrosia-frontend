@@ -23,7 +23,12 @@ const checkUserConfirmationCode = async (user) => {
 };
 
 const setNewPassword = async (user) => {
-  const res = await Request("update", API_URL + "/updatePassword/", user);
+  const res = await Request("put", API_URL + "/updatePassword/", user);
+  return res;
+};
+
+const updateProfile = async (user) => {
+  const res = await Request("put", API_URL + "/profile/update/", user);
   return res;
 };
 
@@ -43,6 +48,7 @@ const authService = {
   checkUserConfirmationCode,
   setNewPassword,
   getCurrentUser,
+  updateProfile
 };
 
 export default authService;
